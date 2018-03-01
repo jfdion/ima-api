@@ -1,4 +1,4 @@
-package ca.ulaval.glo3001.ima.api.handler;
+package ca.ulaval.gif3001.ima.api.handler;
 
 import spark.Request;
 import spark.Response;

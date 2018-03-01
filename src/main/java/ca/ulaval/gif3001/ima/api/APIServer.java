@@ -1,6 +1,5 @@
-package ca.ulaval.glo3001.ima.api;
+package ca.ulaval.gif3001.ima.api;
 
-import ca.ulaval.glo3001.ima.api.handler.TestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javaslang.control.Try;
 
@@ -9,6 +8,9 @@ import static spark.Spark.*;
 public class APIServer {
 
     private static ObjectMapper jsonObjectMapper = new ObjectMapper();
+
+    public APIServer() {
+    }
 
     public static void main(String[] args) {
 
@@ -19,7 +21,8 @@ public class APIServer {
 
         port(portNumber);
 
-        get("/api/test", new TestHandler(), jsonObjectMapper::writeValueAsString);
+        get("/", (req, res) -> "Project dashboard api");
+        get("/ping", (req, res) -> "pong");
 
         options("*", (request, response) -> "");
         before((request, response) -> {
