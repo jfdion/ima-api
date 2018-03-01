@@ -22,7 +22,7 @@ public class APIServer {
         port(portNumber);
 
         get("/", (req, res) -> "Project dashboard api");
-        get("/ping", (req, res) -> "pong");
+        get("/ping", (req, res) -> "pong bang crash");
 
         options("*", (request, response) -> "");
         before((request, response) -> {
