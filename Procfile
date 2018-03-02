@@ -1,1 +1,1 @@
-web: java -jar /build/libs/api-1.0-SNAPSHOT.jar
+web: java $JAVA_OPTS -jar app.jar
