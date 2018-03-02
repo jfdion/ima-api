@@ -52,4 +52,7 @@ jar {
                 'Main-Class': "ca.ulaval.gif3001.ima.api.APIServer"
         )
     }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
