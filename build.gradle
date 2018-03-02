@@ -11,14 +11,7 @@ sourceCompatibility = 1.8
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
-jar {
-    manifest {
-        attributes(
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': "ca.ulaval.gif3001.ima.api.APIServer"
-        )
-    }
-}
+
 
 repositories {
     mavenCentral()
@@ -51,4 +44,13 @@ dependencies {
     // Dev
     testCompile 'junit:junit:4.+'
     testCompile 'org.mockito:mockito-core:2.13.0'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': "ca.ulaval.gif3001.ima.api.APIServer"
+        )
+    }
 }
