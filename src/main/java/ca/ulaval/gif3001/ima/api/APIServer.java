@@ -3,17 +3,17 @@ package ca.ulaval.gif3001.ima.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javaslang.control.Try;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static spark.Spark.*;
 
 public class APIServer {
 
     private static ObjectMapper jsonObjectMapper = new ObjectMapper();
 
-    public APIServer() {
-    }
-
     public static void main(String[] args) {
-
         Integer portNumber = Try.of(() -> Integer.valueOf(System.getenv("PORT"))).orElseGet((t) -> {
             System.err.println("There was an error retrieving PORT env var using the default one (8080)");
             return 8080;
@@ -22,6 +22,7 @@ public class APIServer {
         port(portNumber);
 
         get("/", (req, res) -> "Project dashboard api");
+        get("/status", (req, res) -> String.format("Running on port %s", portNumber));
         get("/ping", (req, res) -> "pong bang crash");
 
         options("*", (request, response) -> "");
