@@ -21,7 +21,7 @@ public class APIServer {
         port(portNumber);
 
         get("/", (req, res) -> "Project dashboard api");
-        get("/status", (req, res) -> String.format("mongodb://%s:%s@%s:%d/%s", dbUser, dbPassword, dbHost, dbPort, dbName));
+        //get("/status", (req, res) -> String.format("mongodb://%s:%s@%s:%d/%s", dbUser, dbPassword, dbHost, dbPort, dbName));
         get("/ping", (req, res) -> "pong bang crash");
 
         options("*", (request, response) -> "");
