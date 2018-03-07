@@ -71,7 +71,7 @@ public class APIServer {
                 return "";
             });
 
-            dbHost = dbPassword = Try.of(() -> stringValueOf(System.getenv("DB_HOST"))).orElseGet((t) -> {
+            dbHost = Try.of(() -> stringValueOf(System.getenv("DB_HOST"))).orElseGet((t) -> {
                 System.err.println("There was an error retrieving DB_PASSWORD env var using the default one (localhost)");
                 return "localhost";
             });
