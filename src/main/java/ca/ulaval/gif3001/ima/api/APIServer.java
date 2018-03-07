@@ -19,10 +19,15 @@ public class APIServer {
             return 8080;
         });
 
+        String dbUser = Try.of(() -> String.valueOf(System.getenv("DB_USER"))).orElseGet((t) -> {
+            System.err.println("There was an error retrieving DB_USER env var using the default one (robert)");
+            return "robert";
+        });
+
         port(portNumber);
 
         get("/", (req, res) -> "Project dashboard api");
-        get("/status", (req, res) -> String.format("Running on port %s", portNumber));
+        get("/status", (req, res) -> String.format("Running on port %s, database user %s", portNumber, dbUser));
         get("/ping", (req, res) -> "pong bang crash");
 
         options("*", (request, response) -> "");
