@@ -16,11 +16,12 @@ public class APIServer {
         String dbUser = initEnvVars.getDbUser();
         String dbPassword = initEnvVars.getDbPassword();
         String dbHost = initEnvVars.getDbHost();
-
+        Integer dbPort = initEnvVars.getDbPort();
+        String dbName = initEnvVars.getDbName();
         port(portNumber);
 
         get("/", (req, res) -> "Project dashboard api");
-        get("/status", (req, res) -> String.format("Running on port %s, database user %s, database password %s, database host %s", portNumber, dbUser, dbPassword, dbHost));
+        get("/status", (req, res) -> String.format("mongodb://%s:%s@%s:%d/%s", dbUser, dbPassword, dbHost, dbPort, dbName));
         get("/ping", (req, res) -> "pong bang crash");
 
         options("*", (request, response) -> "");
@@ -37,6 +38,8 @@ public class APIServer {
         private String dbUser;
         private String dbPassword;
         private String dbHost;
+        private Integer dbPort;
+        private String dbName;
 
         public Integer getPortNumber() {
             return portNumber;
@@ -54,10 +57,23 @@ public class APIServer {
             return dbHost;
         }
 
+        public Integer getDbPort() {
+            return dbPort;
+        }
+
+        public String getDbName() {
+            return dbName;
+        }
+
         public InitEnvVars invoke() {
             portNumber = Try.of(() -> Integer.valueOf(System.getenv("PORT"))).orElseGet((t) -> {
                 System.err.println("There was an error retrieving PORT env var using the default one (8080)");
                 return 8080;
+            });
+
+            dbPort = Try.of(() -> Integer.valueOf(System.getenv("DB_PORT"))).orElseGet((t) -> {
+                System.err.println("There was an error retrieving DB_PORT env var using the default one (59778)");
+                return 59778;
             });
 
 
@@ -74,6 +90,11 @@ public class APIServer {
             dbHost = Try.of(() -> stringValueOf(System.getenv("DB_HOST"))).orElseGet((t) -> {
                 System.err.println("There was an error retrieving DB_PASSWORD env var using the default one (localhost)");
                 return "localhost";
+            });
+
+            dbName = Try.of(() -> stringValueOf(System.getenv("DB_NAME"))).orElseGet((t) -> {
+                System.err.println("There was an error retrieving DB_NAME env var using the default one (database)");
+                return "database";
             });
 
             return this;
