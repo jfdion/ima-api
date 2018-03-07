@@ -34,6 +34,7 @@ public class APIServer {
     }
 
     private static class InitEnvVars {
+        private String env;
         private Integer portNumber;
         private String dbUser;
         private String dbPassword;
@@ -66,36 +67,42 @@ public class APIServer {
         }
 
         public InitEnvVars invoke() {
+            env= Try.of(() -> stringValueOf(System.getenv("ENV"))).orElseGet((t) -> {
+                System.err.println("There was an error retrieving ENV env var using the default one (dev)");
+                return "dev";
+            });
+
             portNumber = Try.of(() -> Integer.valueOf(System.getenv("PORT"))).orElseGet((t) -> {
                 System.err.println("There was an error retrieving PORT env var using the default one (8080)");
                 return 8080;
             });
+            if (!env.equals("dev")) {
+                dbPort = Try.of(() -> Integer.valueOf(System.getenv("DB_PORT"))).orElseGet((t) -> {
+                    System.err.println("There was an error retrieving DB_PORT env var using the default one (59778)");
+                    return 59778;
+                });
 
-            dbPort = Try.of(() -> Integer.valueOf(System.getenv("DB_PORT"))).orElseGet((t) -> {
-                System.err.println("There was an error retrieving DB_PORT env var using the default one (59778)");
-                return 59778;
-            });
 
+                dbUser = Try.of(() -> stringValueOf(System.getenv("DB_USER"))).orElseGet((t) -> {
+                    System.err.println("There was an error retrieving DB_USER env var using the default one (root)");
+                    return "robert";
+                });
 
-            dbUser = Try.of(() -> stringValueOf(System.getenv("DB_USER"))).orElseGet((t) -> {
-                System.err.println("There was an error retrieving DB_USER env var using the default one (root)");
-                return "robert";
-            });
+                dbPassword = Try.of(() -> stringValueOf(System.getenv("DB_PASSWORD"))).orElseGet((t) -> {
+                    System.err.println("There was an error retrieving DB_PASSWORD env var using the default one (\"\")");
+                    return "";
+                });
 
-            dbPassword = Try.of(() -> stringValueOf(System.getenv("DB_PASSWORD"))).orElseGet((t) -> {
-                System.err.println("There was an error retrieving DB_PASSWORD env var using the default one (\"\")");
-                return "";
-            });
+                dbHost = Try.of(() -> stringValueOf(System.getenv("DB_HOST"))).orElseGet((t) -> {
+                    System.err.println("There was an error retrieving DB_PASSWORD env var using the default one (localhost)");
+                    return "localhost";
+                });
 
-            dbHost = Try.of(() -> stringValueOf(System.getenv("DB_HOST"))).orElseGet((t) -> {
-                System.err.println("There was an error retrieving DB_PASSWORD env var using the default one (localhost)");
-                return "localhost";
-            });
-
-            dbName = Try.of(() -> stringValueOf(System.getenv("DB_NAME"))).orElseGet((t) -> {
-                System.err.println("There was an error retrieving DB_NAME env var using the default one (database)");
-                return "database";
-            });
+                dbName = Try.of(() -> stringValueOf(System.getenv("DB_NAME"))).orElseGet((t) -> {
+                    System.err.println("There was an error retrieving DB_NAME env var using the default one (database)");
+                    return "database";
+                });
+            }
 
             return this;
         }
