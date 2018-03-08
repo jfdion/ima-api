@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = "ca.ulaval.gif3001.ima.api.APIServer"
+mainClassName = "ca.ulaval.gif3101.ima.api.APIServer"
 
 sourceCompatibility = 1.8
 
@@ -37,6 +37,16 @@ dependencies {
     // slf4j
     compile group: 'org.slf4j', name:'slf4j-api', version:'1.7.5'
     compile group: 'org.slf4j', name:'slf4j-simple', version:'1.6.4'
+
+    // faker
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
+
+    // javax WS RS
+    compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
+
+    // Jersey
+    compile 'org.glassfish.jersey.core:jersey-common:2.22.2'
+
 
     // Dev
     testCompile 'junit:junit:4.+'
