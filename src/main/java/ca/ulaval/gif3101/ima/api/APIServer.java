@@ -4,17 +4,11 @@ import ca.ulaval.gif3101.ima.api.app.Application;
 import ca.ulaval.gif3101.ima.api.app.config.CorsConfig;
 import ca.ulaval.gif3101.ima.api.app.context.Context;
 import ca.ulaval.gif3101.ima.api.bootstrap.Bootstrap;
-import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
 import ca.ulaval.gif3101.ima.api.http.context.RestContext;
 import ca.ulaval.gif3101.ima.api.http.endpoint.MessageEndpoint;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javaslang.control.Try;
 
-import static spark.Spark.*;
-
 public class APIServer {
-
-    private static ObjectMapper jsonObjectMapper = new ObjectMapper();
 
     public static void main(String[] args) throws Exception {
         InitEnvVars initEnvVars = new InitEnvVars().invoke();

@@ -55,6 +55,7 @@ public class Application {
 
     public void start() {
         spark = Service.ignite().port(portNumber);
+        System.out.println(spark);
         //spark.staticFiles.location("/web");
         //spark.staticFiles.expireTime(600L);
         if (isDebugMode) {
