@@ -37,7 +37,7 @@ public class MessageController {
         JsonWrapper wrapper;
         try {
             List<MessageDto> dtos = messageService.getAll();
-            QueryFilter queryFilter = queryFilterFactory.create(request, dtos);
+            QueryFilter queryFilter = queryFilterFactory.create(request, dtos, MessageDto.class);
             wrapper = new JsonCollectionWrapper<>(dtos, queryFilter);
         } catch (Exception e) {
             wrapper = new JsonEmptyWrapper();

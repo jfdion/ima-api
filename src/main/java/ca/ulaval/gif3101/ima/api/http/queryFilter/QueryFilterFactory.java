@@ -14,7 +14,7 @@ public class QueryFilterFactory {
         this.uriBuilderFactory = uriBUilder;
     }
 
-    public <T> QueryFilter create(Request request, List<T> collection) {
+    public <T> QueryFilter create(Request request, List<T> collection, Class type) {
         return new QueryFilter<>(
                 uriBuilderFactory,
                 request.url(),

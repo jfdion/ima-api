@@ -22,6 +22,7 @@ public class JsonCollectionWrapper<T> extends AbstractJsonWrapper {
         this.collection = collection;
     }
 
+    @SuppressWarnings("unchecked")
     public JsonCollectionWrapper(List<T> collection, QueryFilter queryFilter) {
         this.queryFilter = queryFilter;
         this.collection = queryFilter.apply();
