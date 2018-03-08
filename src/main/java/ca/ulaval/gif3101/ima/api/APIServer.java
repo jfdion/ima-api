@@ -4,22 +4,46 @@ import ca.ulaval.gif3101.ima.api.app.Application;
 import ca.ulaval.gif3101.ima.api.app.config.CorsConfig;
 import ca.ulaval.gif3101.ima.api.app.context.Context;
 import ca.ulaval.gif3101.ima.api.bootstrap.Bootstrap;
+import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
 import ca.ulaval.gif3101.ima.api.http.context.RestContext;
 import ca.ulaval.gif3101.ima.api.http.endpoint.MessageEndpoint;
 import javaslang.control.Try;
+
+import static spark.Spark.*;
 
 public class APIServer {
 
     public static void main(String[] args) throws Exception {
         InitEnvVars initEnvVars = new InitEnvVars().invoke();
         Bootstrap bootstrap = new Bootstrap(initEnvVars.getEnv());
-        Application app = new Application(initEnvVars.getPortNumber());
 
-        Context restContext = new RestContext("/api", initCorsConfig());
-        restContext.addEndpoint(new MessageEndpoint(bootstrap.messageController()));
+        port(initEnvVars.getPortNumber());
 
-        app.addContext(restContext);
-        app.start();
+        get("/", (req, res) -> "Project dashboard api");
+
+        get("/ping", (req, res) -> "pong");
+
+        MessageController messageController = bootstrap.messageController();
+        get("/api/messages", (req, res) -> messageController.getAll(req, res));
+        post("/api/messages", (req, res) -> messageController.create(req, res));
+
+        options("*", (request, response) -> "");
+        before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Request-Method", "*");
+            response.header("Access-Control-Allow-Headers", "*");
+            response.type("application/json");
+        });
+
+
+        //Application app = new Application(initEnvVars.getPortNumber());
+
+
+        //Context restContext = new RestContext("/api", initCorsConfig());
+        //restContext.addEndpoint(new MessageEndpoint(bootstrap.messageController()));
+
+        //app.addContext(restContext);
+        //app.start();
     }
 
     private static class InitEnvVars {
@@ -40,7 +64,7 @@ public class APIServer {
         }
 
         public InitEnvVars invoke() {
-            env= Try.of(() -> stringValueOf(System.getenv("ENV"))).orElseGet((t) -> {
+            env = Try.of(() -> stringValueOf(System.getenv("ENV"))).orElseGet((t) -> {
                 System.err.println("There was an error retrieving ENV env var using the default one (dev)");
                 return "dev";
             });
@@ -50,7 +74,7 @@ public class APIServer {
                 return 8080;
             });
 
-            env= Try.of(() -> stringValueOf(System.getenv("MONGO_DB"))).orElseGet((t) -> {
+            env = Try.of(() -> stringValueOf(System.getenv("MONGO_DB"))).orElseGet((t) -> {
                 System.err.println("There was an error retrieving MONGO_DB env var using the default one (mongodb://dropmessage-ripoff:zxcvbn%95@ds259778.mlab.com:59778/ima-api)");
                 return "mongodb://dropmessage-ripoff:zxcvbn%95@ds259778.mlab.com:59778/ima-api";
             });
