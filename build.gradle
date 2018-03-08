@@ -59,7 +59,7 @@ jar {
     manifest {
         attributes(
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': "ca.ulaval.gif3001.ima.api.APIServer"
+                'Main-Class': "ca.ulaval.gif3101.ima.api.APIServer"
         )
     }
     from {
