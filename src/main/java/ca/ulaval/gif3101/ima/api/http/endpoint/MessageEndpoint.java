@@ -16,6 +16,8 @@ public class MessageEndpoint extends AbstractEndpoint {
     }
 
     public void register(Service spark) {
+        System.out.println(path(MESSAGE_LIST_ALL));
+        System.out.println(path(MESSAGE_CREATE));
         spark.get(path(MESSAGE_LIST_ALL), (request, response) -> controller.getAll(request, response));
         spark.post(path(MESSAGE_CREATE), (request, response) -> controller.create(request, response));
     }
