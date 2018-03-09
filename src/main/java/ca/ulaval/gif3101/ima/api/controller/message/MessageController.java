@@ -62,7 +62,7 @@ public class MessageController {
             filterConfig.fromLocation = new Location(request.queryParams("location"));
         }
         if (request.queryParams("location-scope") != null) {
-            filterConfig.locationScope = FilterConfig.LocationScope.valueOf(request.queryParams("location-scope"));
+            filterConfig.locationScope = FilterConfig.LocationScope.valueOf(request.queryParams("location-scope").toUpperCase());
         }
         return filterConfig;
     }
