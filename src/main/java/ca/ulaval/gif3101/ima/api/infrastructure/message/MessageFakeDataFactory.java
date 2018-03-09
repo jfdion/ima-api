@@ -27,7 +27,7 @@ public class MessageFakeDataFactory {
         System.out.println(String.format("Creating %d fake messages entries", numberOfEntries));
         Faker faker = new Faker(randomGenerator.random());
         MessageEntity entity;
-        Date expiresStart = createDate(2017, 1, 1);
+        Date expiresStart = createDate(2017, 10, 1);
         Date expiresEnd = createDate(2020, 1, 1);
         Date expires;
 
@@ -35,6 +35,7 @@ public class MessageFakeDataFactory {
         Date createdEnd = createDate(2019, 7, 1);
         Date created;
 
+        // Coordonnées du centre de Québec
         Location location = new Location(46.816667, -71.216667);
         Location currentLocation;
 
@@ -51,10 +52,10 @@ public class MessageFakeDataFactory {
             entity.created = dateToString(created);
             entity.expires = dateToString(expires);
 
-            // 150 KM autour de québec
+            // 65 KM autour de québec
             currentLocation = location.add(
-                    Distance.fromMeters(faker.number().numberBetween(0, 15000)),
-                    Distance.fromMeters(faker.number().numberBetween(0, 15000))
+                    Distance.fromMeters(faker.number().numberBetween(0, 65000)),
+                    Distance.fromMeters(faker.number().numberBetween(0, 65000))
             );
 
             entity.latitude = currentLocation.getLatitude();

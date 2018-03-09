@@ -5,6 +5,8 @@ import ca.ulaval.gif3101.ima.api.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageAssembler;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageRepository;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.dto.MessageEntity;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.MessageFilter;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.FilterConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,11 @@ public class MessageRepositoryInMemory implements MessageRepository {
             messages.add(messageAssembler.create(entity));
         }
         return messages;
+    }
+
+    public List<Message> findFiltered(MessageFilter messageFilter, FilterConfig config) {
+        List<Message> messages = findAll();
+        return messageFilter.filter(messages, config);
     }
 
     @Override

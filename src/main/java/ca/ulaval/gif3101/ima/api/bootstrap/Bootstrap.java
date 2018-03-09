@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.bootstrap;
 
 import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
+import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.HaversineDistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageAssembler;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageRepository;
 import ca.ulaval.gif3101.ima.api.http.UriBuilderFactory;
@@ -11,17 +12,17 @@ import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageDAO;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageDAOInMemory;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageFakeDataFactory;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageRepositoryInMemory;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.*;
 import ca.ulaval.gif3101.ima.api.service.MessageService;
 import ca.ulaval.gif3101.ima.api.utils.RandomGenerator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
-import javax.ws.rs.core.UriBuilder;
-
 public class Bootstrap {
 
     public static final String ENV_DEV = "dev";
+    public static final int NUMBER_OF_ENTRIES = 12500;
     private String env;
 
     private MessageController messageController;
@@ -38,6 +39,8 @@ public class Bootstrap {
     private IdGenerator idGenerator;
     private UriBuilderFactory uriBuilderFactory;
 
+    private MessageFilterComposite messageFilter;
+
     public Bootstrap(String env) {
         this.env = env;
     }
@@ -51,7 +54,7 @@ public class Bootstrap {
 
     private MessageService messageService() throws Exception {
         if (messageService == null) {
-            messageService = new MessageService(messageAssembler(), messageRepository());
+            messageService = new MessageService(messageAssembler(), messageRepository(), messageFilter());
         }
         return messageService;
     }
@@ -83,7 +86,7 @@ public class Bootstrap {
             messageDAO = new MessageDAOInMemory(idGenerator());
 
             MessageFakeDataFactory messageFakeFactory = new MessageFakeDataFactory(messageDAO, new Faker(), new RandomGenerator());
-            messageFakeFactory.create(123);
+            messageFakeFactory.create(NUMBER_OF_ENTRIES);
         }
         return messageDAO;
     }
@@ -107,6 +110,16 @@ public class Bootstrap {
             uriBuilderFactory = new UriBuilderFactory();
         }
         return uriBuilderFactory;
+    }
+
+    private MessageFilter messageFilter() {
+        if (messageFilter == null) {
+            messageFilter = new MessageFilterStack();
+            messageFilter.addFilter(new CreatedFilter());
+            messageFilter.addFilter(new NotExpiredFilter());
+            messageFilter.addFilter(new DistanceFilter(new HaversineDistanceCalculatorStrategy()));
+        }
+        return messageFilter;
     }
 
 }

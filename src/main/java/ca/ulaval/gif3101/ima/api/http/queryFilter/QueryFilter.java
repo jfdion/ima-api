@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.http.queryFilter;
 
 import ca.ulaval.gif3101.ima.api.http.UriBuilderFactory;
+import ca.ulaval.gif3101.ima.api.http.queryFilter.exception.EmptyPageException;
 
 import javax.ws.rs.core.UriBuilder;
 import java.util.ArrayList;
@@ -31,7 +32,10 @@ public class QueryFilter<T> {
                 "}";
     }
 
-    public List<T> apply() {
+    public List<T> apply() throws Exception {
+        if (currentPageCount() < 0) {
+            throw new EmptyPageException("There is no entry in this page");
+        }
         int endIndex = Math.min(collection.size() - ((currentPage - 1) * nbPerPage), nbPerPage);
 
         List<T> objects = new ArrayList<>();

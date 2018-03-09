@@ -1,7 +1,9 @@
 package ca.ulaval.gif3101.ima.api.domain.message;
 
+import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.date.Date;
+import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 
 public class Message {
 
@@ -23,7 +25,15 @@ public class Message {
 
     protected Message() {}
 
-    public String getId() {
-        return id;
+    public boolean expired(Date date) {
+        return this.expires.before(date);
+    }
+
+    public boolean created(Date date) {
+        return this.created.before(date);
+    }
+
+    public boolean insideRadius(Distance radius, Location center, DistanceCalculatorStrategy strategy) {
+        return strategy.calculate(center, location).lesserOrEqualThan(radius);
     }
 }

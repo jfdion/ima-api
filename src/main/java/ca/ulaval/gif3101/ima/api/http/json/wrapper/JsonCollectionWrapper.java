@@ -23,7 +23,7 @@ public class JsonCollectionWrapper<T> extends AbstractJsonWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    public JsonCollectionWrapper(List<T> collection, QueryFilter queryFilter) {
+    public JsonCollectionWrapper(List<T> collection, QueryFilter queryFilter) throws Exception {
         this.queryFilter = queryFilter;
         this.collection = queryFilter.apply();
         this.metadata = buildMetadata(collection);

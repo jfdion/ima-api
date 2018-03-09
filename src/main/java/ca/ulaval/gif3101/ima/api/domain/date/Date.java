@@ -18,4 +18,8 @@ public class Date {
     public String toString() {
         return dateTime.toDateTimeISO().toString();
     }
+
+    public boolean before(Date date) {
+        return dateTime.isBefore(date.dateTime);
+    }
 }

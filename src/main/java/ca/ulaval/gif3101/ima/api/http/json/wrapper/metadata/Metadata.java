@@ -14,7 +14,7 @@ public class Metadata {
     @JsonProperty(value = "current-page")
     public int currentPage;
 
-    @JsonProperty(value = "in-current-page")
+    @JsonProperty(value = "count-in-current-page")
     public int inCurrentPage;
 
     @JsonProperty

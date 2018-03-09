@@ -4,12 +4,19 @@ import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
 
 public class Location {
 
+    public static final String STRING_SEPARATOR = ",";
     private double latitude;
     private double longitude;
 
     public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Location(String location) {
+        String[] coordinates = location.split(STRING_SEPARATOR);
+        this.latitude = Double.valueOf(coordinates[0]);
+        this.longitude = Double.valueOf(coordinates[1]);
     }
 
     public double getLatitude() {

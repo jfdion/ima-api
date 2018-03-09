@@ -44,4 +44,8 @@ public class Distance {
         return distance / METERS_IN_MILES;
     }
 
+    public boolean lesserOrEqualThan(Distance distance) {
+        return this.distance <= distance.distance;
+    }
+
 }
