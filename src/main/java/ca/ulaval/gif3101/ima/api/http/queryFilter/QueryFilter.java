@@ -5,7 +5,9 @@ import ca.ulaval.gif3101.ima.api.http.queryFilter.exception.EmptyPageException;
 
 import javax.ws.rs.core.UriBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QueryFilter<T> {
     public static final int NB_PER_PAGE = 50;
@@ -14,6 +16,8 @@ public class QueryFilter<T> {
     private UriBuilderFactory uriBuilderFactory;
     private String uri;
     private List<T> collection;
+
+    private Map<String, String> queryParameters = new HashMap<>();
 
     private int currentPage;
 
@@ -45,6 +49,10 @@ public class QueryFilter<T> {
         return objects;
     }
 
+    public void addQueryParam(String key, String value) {
+        queryParameters.put(key, value);
+    }
+
     public int pageCount() {
         return collection.size() / nbPerPage + ((collection.size() % nbPerPage == 0) ? 0 : 1);
     }
@@ -69,7 +77,18 @@ public class QueryFilter<T> {
         UriBuilder uriBuilder = uriBuilderFactory.create(uri);
         uriBuilder.queryParam("page", currentPage + 1);
 
+        addQueryParamsToBuilder(uriBuilder);
+
         return uriBuilder.build().toString();
+    }
+
+    private void addQueryParamsToBuilder(UriBuilder uriBuilder) {
+        for(Map.Entry<String, String> entry : queryParameters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            uriBuilder.queryParam(key, value);
+        }
     }
 
     public String previousPageUri() {
@@ -78,6 +97,8 @@ public class QueryFilter<T> {
         }
         UriBuilder uriBuilder = uriBuilderFactory.create(uri);
         uriBuilder.queryParam("page", currentPage - 1);
+
+        addQueryParamsToBuilder(uriBuilder);
 
         return uriBuilder.build().toString();
     }
