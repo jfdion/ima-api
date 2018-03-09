@@ -1,5 +1,7 @@
 package ca.ulaval.gif3101.ima.api.infrastructure.message;
 
+import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
+import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.dto.MessageEntity;
 import ca.ulaval.gif3101.ima.api.utils.RandomGenerator;
 import com.github.javafaker.Faker;
@@ -21,7 +23,7 @@ public class MessageFakeDataFactory {
         this.randomGenerator = randomGenerator;
     }
 
-    public void create(int numberOfEntries) throws Exception{
+    public void create(int numberOfEntries) throws Exception {
         System.out.println(String.format("Creating %d fake messages entries", numberOfEntries));
         Faker faker = new Faker(randomGenerator.random());
         MessageEntity entity;
@@ -32,6 +34,9 @@ public class MessageFakeDataFactory {
         Date createdStart = createDate(2016, 7, 1);
         Date createdEnd = createDate(2019, 7, 1);
         Date created;
+
+        Location location = new Location(46.816667, -71.216667);
+        Location currentLocation;
 
         for (int i = 0; i < numberOfEntries; i++) {
             entity = new MessageEntity();
@@ -45,8 +50,15 @@ public class MessageFakeDataFactory {
 
             entity.created = dateToString(created);
             entity.expires = dateToString(expires);
-            entity.longitude = Double.valueOf(faker.address().longitude());
-            entity.latitude = Double.valueOf(faker.address().latitude());
+
+            // 150 KM autour de québec
+            currentLocation = location.add(
+                    Distance.fromMeters(faker.number().numberBetween(0, 15000)),
+                    Distance.fromMeters(faker.number().numberBetween(0, 15000))
+            );
+
+            entity.latitude = currentLocation.getLatitude();
+            entity.longitude = currentLocation.getLongitude();
 
             messageDAO.create(entity);
         }

@@ -40,6 +40,8 @@ public class MessageAssembler {
         dto.latitude = message.location.getLatitude();
         dto.longitude = message.location.getLongitude();
 
+        dto.updateGoogleMaps();
+
         return dto;
     }
 

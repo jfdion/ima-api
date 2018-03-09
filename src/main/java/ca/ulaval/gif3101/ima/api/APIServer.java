@@ -5,6 +5,11 @@ import ca.ulaval.gif3101.ima.api.app.config.CorsConfig;
 import ca.ulaval.gif3101.ima.api.app.context.Context;
 import ca.ulaval.gif3101.ima.api.bootstrap.Bootstrap;
 import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
+import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
+import ca.ulaval.gif3101.ima.api.domain.location.BoundingBox;
+import ca.ulaval.gif3101.ima.api.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.DistanceCalculatorStrategy;
+import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.HaversineDistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.http.context.RestContext;
 import ca.ulaval.gif3101.ima.api.http.endpoint.MessageEndpoint;
 import javaslang.control.Try;
@@ -35,15 +40,6 @@ public class APIServer {
             response.type("application/json");
         });
 
-
-        //Application app = new Application(initEnvVars.getPortNumber());
-
-
-        //Context restContext = new RestContext("/api", initCorsConfig());
-        //restContext.addEndpoint(new MessageEndpoint(bootstrap.messageController()));
-
-        //app.addContext(restContext);
-        //app.start();
     }
 
     private static class InitEnvVars {
