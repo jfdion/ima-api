@@ -13,5 +13,5 @@ public interface MessageRepository {
 
     List<Message> findFiltered(MessageFilter messageFilter, FilterConfig config);
 
-    List<Message> findByLocation(Location location) throws Exception;
+    Message findOneById(String id) throws Exception;
 }

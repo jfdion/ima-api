@@ -34,6 +34,11 @@ public class MessageService {
         return createDtos(messages);
     }
 
+    public MessageDto getOne(MessageDto dto) throws Exception {
+        Message message = messageRepository.findOneById(dto.id);
+        return messageAssembler.createDto(message);
+    }
+
     private List<MessageDto> createDtos(List<Message> messages) {
         List<MessageDto> dtos = new ArrayList<>();
         for(Message message : messages) {

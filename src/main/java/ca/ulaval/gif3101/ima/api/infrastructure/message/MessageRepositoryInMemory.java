@@ -45,7 +45,8 @@ public class MessageRepositoryInMemory implements MessageRepository {
     }
 
     @Override
-    public List<Message> findByLocation(Location location) throws Exception {
-        return null;
+    public Message findOneById(String id) throws Exception {
+        MessageEntity entity = messageDAO.findOneByKey(MessageDAO.ID_KEY, id);
+        return messageAssembler.create(entity);
     }
 }

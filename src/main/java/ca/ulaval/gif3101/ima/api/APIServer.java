@@ -30,6 +30,7 @@ public class APIServer {
 
         MessageController messageController = bootstrap.messageController();
         get("/api/messages", (req, res) -> messageController.getAll(req, res));
+        get("/api/messages/:message-id", (req, res) -> messageController.getOne(req, res));
         post("/api/messages", (req, res) -> messageController.create(req, res));
 
         options("*", (request, response) -> "");

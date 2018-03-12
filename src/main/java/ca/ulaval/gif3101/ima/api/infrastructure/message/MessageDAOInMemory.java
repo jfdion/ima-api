@@ -54,4 +54,18 @@ public class MessageDAOInMemory implements MessageDAO {
         }
         throw new MessageNotFoundException(String.format("No message with id '%s' were found.", entity.id));
     }
+
+    @Override
+    public MessageEntity findOneByKey(String key, String value) throws Exception {
+        switch (key) {
+            case ID_KEY:
+                for(MessageEntity entity: entities) {
+                    if (entity.id.equals(value)) {
+                        return entity;
+                    }
+                }
+                break;
+        }
+        throw new MessageNotFoundException(String.format("No message with value '%s' for key '%s' were found.", value, key));
+    }
 }

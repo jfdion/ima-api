@@ -3,7 +3,9 @@ package ca.ulaval.gif3101.ima.api.controller.message;
 import ca.ulaval.gif3101.ima.api.controller.message.dto.CreateMessageDto;
 import ca.ulaval.gif3101.ima.api.controller.message.dto.MessageDto;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.domain.message.exception.MessageNotFoundException;
 import ca.ulaval.gif3101.ima.api.http.json.message.NoContentMessage;
+import ca.ulaval.gif3101.ima.api.http.json.message.NotFoundMessage;
 import ca.ulaval.gif3101.ima.api.http.json.message.OkMessage;
 import ca.ulaval.gif3101.ima.api.http.json.wrapper.JsonCollectionWrapper;
 import ca.ulaval.gif3101.ima.api.http.json.wrapper.JsonEmptyWrapper;
@@ -43,17 +45,55 @@ public class MessageController {
             QueryFilter queryFilter = queryFilterFactory.create(request, dtos, MessageDto.class);
             wrapper = new JsonCollectionWrapper<>(dtos, queryFilter);
             response.status(HttpServletResponse.SC_OK);
-        } catch(EmptyPageException e) {
-            wrapper = new JsonEmptyWrapper();
-            wrapper.addMessage(new NoContentMessage(e.getMessage()));
-            response.status(HttpServletResponse.SC_NO_CONTENT);
+        } catch (EmptyPageException e) {
+            wrapper = noContentWrapper(response, e);
         } catch (Exception e) {
-            wrapper = new JsonEmptyWrapper();
-            wrapper.addMessage(new UnexpectedErrorMessage(e.getMessage()));
-            response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            wrapper = unexpectedErrorWrapper(response, e);
         }
 
         return mapper.writeValueAsString(wrapper);
+    }
+
+    private JsonWrapper noContentWrapper(Response response, EmptyPageException e) {
+        JsonWrapper wrapper;
+        wrapper = new JsonEmptyWrapper();
+        wrapper.addMessage(new NoContentMessage(e.getMessage()));
+        response.status(HttpServletResponse.SC_NO_CONTENT);
+        return wrapper;
+    }
+
+    public Object getOne(Request request, Response response) throws Exception {
+        JsonWrapper wrapper;
+
+        try {
+            MessageDto dto = new MessageDto();
+            dto.id = request.params("message-id");
+            MessageDto messageDto = messageService.getOne(dto);
+            wrapper = new JsonEntityWrapper<>(messageDto);
+            response.status(HttpServletResponse.SC_OK);
+        } catch (MessageNotFoundException e) {
+            wrapper = notFoundWrapper(response, e);
+        } catch (Exception e) {
+            wrapper = unexpectedErrorWrapper(response, e);
+        }
+
+        return mapper.writeValueAsString(wrapper);
+    }
+
+    private JsonWrapper unexpectedErrorWrapper(Response response, Exception e) {
+        JsonWrapper wrapper;
+        wrapper = new JsonEmptyWrapper();
+        wrapper.addMessage(new UnexpectedErrorMessage(e.getMessage()));
+        response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return wrapper;
+    }
+
+    private JsonWrapper notFoundWrapper(Response response, MessageNotFoundException e) {
+        JsonWrapper wrapper;
+        wrapper = new JsonEmptyWrapper();
+        wrapper.addMessage(new NotFoundMessage(e.getMessage()));
+        response.status(HttpServletResponse.SC_NOT_FOUND);
+        return wrapper;
     }
 
     private FilterConfig initFilterConfig(Request request) {
@@ -76,8 +116,7 @@ public class MessageController {
             wrapper = new JsonEntityWrapper<>(dto);
             wrapper.addMessage(new OkMessage("Message created with success"));
         } catch (Exception e) {
-            wrapper = new JsonEmptyWrapper();
-            wrapper.addMessage(new UnexpectedErrorMessage(e.getMessage()));
+            wrapper = unexpectedErrorWrapper(response, e);
         }
 
         response.status(HttpServletResponse.SC_CREATED);
