@@ -1,6 +1,5 @@
 package ca.ulaval.gif3101.ima.api;
 
-import ca.ulaval.gif3101.ima.api.app.config.CorsConfig;
 import ca.ulaval.gif3101.ima.api.bootstrap.Bootstrap;
 import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
 import javaslang.control.Try;
@@ -76,19 +75,5 @@ public class APIServer {
             }
             return String.valueOf(value);
         }
-    }
-
-    private static CorsConfig initCorsConfig() {
-        CorsConfig corsConfig = new CorsConfig();
-        corsConfig.setPath("/api");
-        corsConfig.addOrigin("*");
-        corsConfig.addMethod("GET");
-        corsConfig.addMethod("POST");
-        corsConfig.addMethod("PUT");
-        corsConfig.addMethod("DELETE");
-        corsConfig.addMethod("OPTIONS");
-        corsConfig.addHeader("X-Requested-With");
-        corsConfig.addHeader("Content-Type");
-        return corsConfig;
     }
 }
