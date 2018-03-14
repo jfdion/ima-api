@@ -1,4 +1,4 @@
-package ca.ulaval.gif3101.ima.api.domain.Distance;
+package ca.ulaval.gif3101.ima.api.domain.distance;
 
 public class Distance {
 
