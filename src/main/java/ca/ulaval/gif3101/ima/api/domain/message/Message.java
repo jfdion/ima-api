@@ -2,7 +2,7 @@ package ca.ulaval.gif3101.ima.api.domain.message;
 
 import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
-import ca.ulaval.gif3101.ima.api.domain.date.Date;
+import ca.ulaval.gif3101.ima.api.domain.date.DateJodaTimeAdapter;
 import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 
 public class Message {
@@ -11,25 +11,25 @@ public class Message {
 
     protected String title;
     protected String body;
-    protected Date expires;
-    protected Date created;
+    protected DateJodaTimeAdapter expires;
+    protected DateJodaTimeAdapter created;
     protected Location location;
 
-    public Message(String title, String body, Date expires, Location location) {
+    public Message(String title, String body, DateJodaTimeAdapter expires, Location location) {
         this.title = title;
         this.body = body;
         this.expires = expires;
         this.location = location;
-        this.created = new Date();
+        this.created = new DateJodaTimeAdapter();
     }
 
     protected Message() {}
 
-    public boolean expired(Date date) {
+    public boolean expired(DateJodaTimeAdapter date) {
         return this.expires.before(date);
     }
 
-    public boolean created(Date date) {
+    public boolean created(DateJodaTimeAdapter date) {
         return this.created.before(date);
     }
 

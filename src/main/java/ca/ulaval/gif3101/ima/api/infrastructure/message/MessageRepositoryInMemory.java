@@ -1,12 +1,12 @@
 package ca.ulaval.gif3101.ima.api.infrastructure.message;
 
-import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageAssembler;
+import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageRepository;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.dto.MessageEntity;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.MessageFilter;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.FilterConfig;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.dao.MessageDAO;
+import ca.ulaval.gif3101.ima.api.domain.message.filter.Filter;
+import ca.ulaval.gif3101.ima.api.domain.message.filter.FilterConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +15,40 @@ public class MessageRepositoryInMemory implements MessageRepository {
 
     private MessageAssembler messageAssembler;
     private MessageDAO messageDAO;
+    private Filter filter;
 
-    public MessageRepositoryInMemory(MessageAssembler messageAssembler, MessageDAO messageDAO) {
+    public MessageRepositoryInMemory(MessageAssembler messageAssembler, MessageDAO messageDAO, Filter filter) {
         this.messageAssembler = messageAssembler;
         this.messageDAO = messageDAO;
+        this.filter = filter;
     }
 
     @Override
     public void save(Message message) throws Exception {
-        MessageEntity entity = messageAssembler.createEntity(message);
-        this.messageDAO.create(entity);
-        messageAssembler.updateMessage(message, entity);
+        MessageDto dto = messageAssembler.createDto(message);
+        this.messageDAO.create(dto);
+        messageAssembler.updateMessage(message, dto);
     }
 
     @Override
     public List<Message> findAll() {
-        List<MessageEntity> entities = this.messageDAO.findAll();
+        List<MessageDto> dtos = this.messageDAO.findAll();
 
         List<Message> messages = new ArrayList<>();
-        for(MessageEntity entity:entities) {
-            messages.add(messageAssembler.create(entity));
+        for(MessageDto dto:dtos) {
+            messages.add(messageAssembler.create(dto));
         }
         return messages;
     }
 
-    public List<Message> findFiltered(MessageFilter messageFilter, FilterConfig config) {
+    public List<Message> findFiltered(FilterConfig config) {
         List<Message> messages = findAll();
-        return messageFilter.filter(messages, config);
+        return filter.filter(messages, config);
     }
 
     @Override
     public Message findOneById(String id) throws Exception {
-        MessageEntity entity = messageDAO.findOneByKey(MessageDAO.ID_KEY, id);
-        return messageAssembler.create(entity);
+        MessageDto dto = messageDAO.findOneByKey(MessageDAO.ID_KEY, id);
+        return messageAssembler.create(dto);
     }
 }

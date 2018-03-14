@@ -1,11 +1,10 @@
-package ca.ulaval.gif3101.ima.api.service;
+package ca.ulaval.gif3101.ima.api.service.message;
 
-import ca.ulaval.gif3101.ima.api.controller.message.dto.MessageDto;
+import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageAssembler;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageRepository;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.MessageFilter;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.FilterConfig;
+import ca.ulaval.gif3101.ima.api.domain.message.filter.FilterConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +13,10 @@ public class MessageService {
 
     private MessageAssembler messageAssembler;
     private MessageRepository messageRepository;
-    private MessageFilter messageFilter;
 
-    public MessageService(MessageAssembler messageAssembler, MessageRepository messageRepository, MessageFilter messageFilter) {
+    public MessageService(MessageAssembler messageAssembler, MessageRepository messageRepository) {
         this.messageAssembler = messageAssembler;
         this.messageRepository = messageRepository;
-        this.messageFilter = messageFilter;
     }
 
     public MessageDto createMessage(MessageDto dto) throws Exception {
@@ -41,14 +38,14 @@ public class MessageService {
 
     private List<MessageDto> createDtos(List<Message> messages) {
         List<MessageDto> dtos = new ArrayList<>();
-        for(Message message : messages) {
+        for (Message message : messages) {
             dtos.add(messageAssembler.createDto(message));
         }
         return dtos;
     }
 
     public List<MessageDto> getAllFiltered(FilterConfig config) {
-        List<Message> messages = messageRepository.findFiltered(messageFilter, config);
+        List<Message> messages = messageRepository.findFiltered(config);
         return createDtos(messages);
     }
 

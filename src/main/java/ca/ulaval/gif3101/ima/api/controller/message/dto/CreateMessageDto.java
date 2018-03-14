@@ -1,5 +1,6 @@
 package ca.ulaval.gif3101.ima.api.controller.message.dto;
 
+import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateMessageDto extends MessageDto {

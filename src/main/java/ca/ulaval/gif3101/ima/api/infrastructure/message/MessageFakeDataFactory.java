@@ -2,6 +2,8 @@ package ca.ulaval.gif3101.ima.api.infrastructure.message;
 
 import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.dao.MessageDAO;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.dto.MessageEntity;
 import ca.ulaval.gif3101.ima.api.utils.RandomGenerator;
 import com.github.javafaker.Faker;
@@ -9,7 +11,6 @@ import org.joda.time.DateTime;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 public class MessageFakeDataFactory {
 
@@ -26,7 +27,7 @@ public class MessageFakeDataFactory {
     public void create(int numberOfEntries) throws Exception {
         System.out.println(String.format("Creating %d fake messages entries", numberOfEntries));
         Faker faker = new Faker(randomGenerator.random());
-        MessageEntity entity;
+        MessageDto dto;
         Date expiresStart = createDate(2017, 10, 1);
         Date expiresEnd = createDate(2020, 1, 1);
         Date expires;
@@ -40,17 +41,17 @@ public class MessageFakeDataFactory {
         Location currentLocation;
 
         for (int i = 0; i < numberOfEntries; i++) {
-            entity = new MessageEntity();
-            entity.title = faker.lorem().sentence();
-            entity.body = faker.lorem().paragraph();
+            dto = new MessageDto();
+            dto.title = faker.lorem().sentence();
+            dto.body = faker.lorem().paragraph();
 
             created = faker.date().between(createdStart, createdEnd);
             do {
                 expires = faker.date().between(expiresStart, expiresEnd);
             } while (expires.before(created));
 
-            entity.created = dateToString(created);
-            entity.expires = dateToString(expires);
+            dto.created = dateToString(created);
+            dto.expires = dateToString(expires);
 
             // 65 KM autour de québec
             currentLocation = location.add(
@@ -58,10 +59,10 @@ public class MessageFakeDataFactory {
                     Distance.fromMeters(faker.number().numberBetween(0, 65000))
             );
 
-            entity.latitude = currentLocation.getLatitude();
-            entity.longitude = currentLocation.getLongitude();
+            dto.latitude = currentLocation.getLatitude();
+            dto.longitude = currentLocation.getLongitude();
 
-            messageDAO.create(entity);
+            messageDAO.create(dto);
         }
     }
 

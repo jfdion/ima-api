@@ -1,7 +1,10 @@
 package ca.ulaval.gif3101.ima.api.controller.message;
 
 import ca.ulaval.gif3101.ima.api.controller.message.dto.CreateMessageDto;
-import ca.ulaval.gif3101.ima.api.controller.message.dto.MessageDto;
+import ca.ulaval.gif3101.ima.api.controller.message.dto.MessageDtoResponse;
+import ca.ulaval.gif3101.ima.api.controller.transformer.MessageTransformer;
+import ca.ulaval.gif3101.ima.api.controller.transformer.Transformer;
+import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.message.exception.MessageNotFoundException;
 import ca.ulaval.gif3101.ima.api.http.json.message.NoContentMessage;
@@ -15,13 +18,14 @@ import ca.ulaval.gif3101.ima.api.http.json.message.UnexpectedErrorMessage;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.QueryFilter;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.QueryFilterFactory;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.exception.EmptyPageException;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.FilterConfig;
-import ca.ulaval.gif3101.ima.api.service.MessageService;
+import ca.ulaval.gif3101.ima.api.domain.message.filter.FilterConfig;
+import ca.ulaval.gif3101.ima.api.service.message.MessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Request;
 import spark.Response;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageController {
@@ -29,11 +33,13 @@ public class MessageController {
     private MessageService messageService;
     private ObjectMapper mapper;
     private QueryFilterFactory queryFilterFactory;
+    private Transformer<MessageDtoResponse, MessageDto> transformer;
 
-    public MessageController(MessageService messageService, ObjectMapper mapper, QueryFilterFactory queryFilterFactory) {
+    public MessageController(MessageService messageService, ObjectMapper mapper, QueryFilterFactory queryFilterFactory, Transformer<MessageDtoResponse, MessageDto> messageTransformer) {
         this.messageService = messageService;
         this.mapper = mapper;
         this.queryFilterFactory = queryFilterFactory;
+        this.transformer = messageTransformer;
     }
 
     public Object getAll(Request request, Response response) throws Exception {
@@ -41,7 +47,7 @@ public class MessageController {
         JsonWrapper wrapper;
         try {
             FilterConfig filterConfig = initFilterConfig(request);
-            List<MessageDto> dtos = messageService.getAllFiltered(filterConfig);
+            List<MessageDtoResponse> dtos = transformer.transform(messageService.getAllFiltered(filterConfig));
             QueryFilter queryFilter = queryFilterFactory.create(request, dtos, MessageDto.class);
             wrapper = new JsonCollectionWrapper<>(dtos, queryFilter);
             response.status(HttpServletResponse.SC_OK);
@@ -68,7 +74,7 @@ public class MessageController {
         try {
             MessageDto dto = new MessageDto();
             dto.id = request.params("message-id");
-            MessageDto messageDto = messageService.getOne(dto);
+            MessageDtoResponse messageDto = transformer.transform(messageService.getOne(dto));
             wrapper = new JsonEntityWrapper<>(messageDto);
             response.status(HttpServletResponse.SC_OK);
         } catch (MessageNotFoundException e) {
@@ -112,7 +118,7 @@ public class MessageController {
 
         JsonWrapper wrapper;
         try {
-            MessageDto dto = messageService.createMessage(inputDto);
+            MessageDtoResponse dto = transformer.transform(messageService.createMessage(inputDto));
             wrapper = new JsonEntityWrapper<>(dto);
             wrapper.addMessage(new OkMessage("Message created with success"));
         } catch (Exception e) {

@@ -2,7 +2,7 @@ package ca.ulaval.gif3101.ima.api.controller.message.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MessageDto {
+public class MessageDtoResponse {
 
     private final String GOOGLE_MAP_SEARCH = "https://www.google.ca/maps/search/%s,%s";
 
@@ -25,5 +25,4 @@ public class MessageDto {
     public void updateGoogleMaps() {
         googleMaps = String.format(GOOGLE_MAP_SEARCH, latitude, longitude);
     }
-
 }

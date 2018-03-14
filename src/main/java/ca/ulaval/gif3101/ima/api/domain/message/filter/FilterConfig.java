@@ -1,4 +1,4 @@
-package ca.ulaval.gif3101.ima.api.infrastructure.message.filter;
+package ca.ulaval.gif3101.ima.api.domain.message.filter;
 
 import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;

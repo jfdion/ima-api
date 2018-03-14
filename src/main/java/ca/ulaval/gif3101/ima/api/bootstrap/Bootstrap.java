@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.bootstrap;
 
 import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
+import ca.ulaval.gif3101.ima.api.controller.transformer.MessageTransformer;
 import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.HaversineDistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageAssembler;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageRepository;
@@ -8,12 +9,12 @@ import ca.ulaval.gif3101.ima.api.http.UriBuilderFactory;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.QueryFilterFactory;
 import ca.ulaval.gif3101.ima.api.infrastructure.id.IdGenerator;
 import ca.ulaval.gif3101.ima.api.infrastructure.id.UUIDGenerator;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageDAO;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageDAOInMemory;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.dao.MessageDAO;
+import ca.ulaval.gif3101.ima.api.infrastructure.message.dao.MessageDAOInMemory;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageFakeDataFactory;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.MessageRepositoryInMemory;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.filter.*;
-import ca.ulaval.gif3101.ima.api.service.MessageService;
+import ca.ulaval.gif3101.ima.api.domain.message.filter.*;
+import ca.ulaval.gif3101.ima.api.service.message.MessageService;
 import ca.ulaval.gif3101.ima.api.utils.RandomGenerator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,7 @@ public class Bootstrap {
 
     private MessageService messageService;
     private ObjectMapper objectMapper;
+    private MessageTransformer messageTransformer;
 
     private MessageAssembler messageAssembler;
     private MessageRepository messageRepository;
@@ -39,7 +41,7 @@ public class Bootstrap {
     private IdGenerator idGenerator;
     private UriBuilderFactory uriBuilderFactory;
 
-    private MessageFilterComposite messageFilter;
+    private FilterComposite messageFilter;
 
     public Bootstrap(String env) {
         this.env = env;
@@ -47,16 +49,23 @@ public class Bootstrap {
 
     public MessageController messageController() throws Exception {
         if (messageController == null) {
-            messageController = new MessageController(messageService(), objectMapper(), queryFilterFactory());
+            messageController = new MessageController(messageService(), objectMapper(), queryFilterFactory(), messageTransformer());
         }
         return messageController;
     }
 
     private MessageService messageService() throws Exception {
         if (messageService == null) {
-            messageService = new MessageService(messageAssembler(), messageRepository(), messageFilter());
+            messageService = new MessageService(messageAssembler(), messageRepository());
         }
         return messageService;
+    }
+
+    private MessageTransformer messageTransformer() {
+        if (messageTransformer == null) {
+            messageTransformer = new MessageTransformer();
+        }
+        return messageTransformer;
     }
 
     private ObjectMapper objectMapper() {
@@ -76,7 +85,7 @@ public class Bootstrap {
 
     private MessageRepository messageRepository() throws Exception {
         if (messageRepository == null) {
-            messageRepository = new MessageRepositoryInMemory(messageAssembler(), messageDAO());
+            messageRepository = new MessageRepositoryInMemory(messageAssembler(), messageDAO(), messageFilter());
         }
         return messageRepository;
     }
@@ -112,9 +121,9 @@ public class Bootstrap {
         return uriBuilderFactory;
     }
 
-    private MessageFilter messageFilter() {
+    private Filter messageFilter() {
         if (messageFilter == null) {
-            messageFilter = new MessageFilterStack();
+            messageFilter = new FilterStack();
             messageFilter.addFilter(new CreatedFilter());
             messageFilter.addFilter(new NotExpiredFilter());
             messageFilter.addFilter(new DistanceFilter(new HaversineDistanceCalculatorStrategy()));

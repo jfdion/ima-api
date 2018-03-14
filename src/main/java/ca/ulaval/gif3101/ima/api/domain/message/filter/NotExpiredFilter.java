@@ -1,23 +1,24 @@
-package ca.ulaval.gif3101.ima.api.infrastructure.message.filter;
+package ca.ulaval.gif3101.ima.api.domain.message.filter;
 
-import ca.ulaval.gif3101.ima.api.domain.date.Date;
+import ca.ulaval.gif3101.ima.api.domain.date.DateJodaTimeAdapter;
 import ca.ulaval.gif3101.ima.api.domain.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreatedFilter implements MessageFilter {
+public class NotExpiredFilter implements Filter {
 
     @Override
     public List<Message> filter(List<Message> messages, FilterConfig config) {
-        if (config.isCreated == false) {
+        if (config.isExpired) {
             return messages;
         }
-        List<Message> results = new ArrayList<>();
 
-        Date now = new Date();
+        List<Message> results = new ArrayList<>();
+        DateJodaTimeAdapter now = new DateJodaTimeAdapter();
+
         for (Message message : messages) {
-            if (message.created(now)) {
+            if (!message.expired(now)) {
                 results.add(message);
             }
         }
