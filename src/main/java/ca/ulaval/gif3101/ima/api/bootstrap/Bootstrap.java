@@ -1,7 +1,7 @@
 package ca.ulaval.gif3101.ima.api.bootstrap;
 
 import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
-import ca.ulaval.gif3101.ima.api.controller.transformer.MessageTransformer;
+import ca.ulaval.gif3101.ima.api.service.transformer.MessageTransformer;
 import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.HaversineDistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageAssembler;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageRepository;

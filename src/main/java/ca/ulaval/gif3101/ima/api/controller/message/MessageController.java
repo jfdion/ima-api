@@ -2,8 +2,7 @@ package ca.ulaval.gif3101.ima.api.controller.message;
 
 import ca.ulaval.gif3101.ima.api.controller.message.dto.CreateMessageDto;
 import ca.ulaval.gif3101.ima.api.controller.message.dto.MessageDtoResponse;
-import ca.ulaval.gif3101.ima.api.controller.transformer.MessageTransformer;
-import ca.ulaval.gif3101.ima.api.controller.transformer.Transformer;
+import ca.ulaval.gif3101.ima.api.service.transformer.Transformer;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.message.exception.MessageNotFoundException;
@@ -22,7 +21,6 @@ import spark.Request;
 import spark.Response;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MessageController {
