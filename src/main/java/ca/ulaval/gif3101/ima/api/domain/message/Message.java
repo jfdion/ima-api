@@ -1,6 +1,6 @@
 package ca.ulaval.gif3101.ima.api.domain.message;
 
-import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
+import ca.ulaval.gif3101.ima.api.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.date.DateJodaTimeAdapter;
 import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.DistanceCalculatorStrategy;
@@ -23,7 +23,8 @@ public class Message {
         this.created = new DateJodaTimeAdapter();
     }
 
-    protected Message() {}
+    protected Message() {
+    }
 
     public boolean expired(DateJodaTimeAdapter date) {
         return this.expires.before(date);
@@ -33,7 +34,7 @@ public class Message {
         return this.created.before(date);
     }
 
-    public boolean insideRadius(Distance radius, Location center, DistanceCalculatorStrategy strategy) {
+    public boolean insideRadius(Location center, Distance radius, DistanceCalculatorStrategy strategy) {
         return strategy.calculate(center, location).lesserOrEqualThan(radius);
     }
 }

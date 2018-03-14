@@ -1,10 +1,9 @@
 package ca.ulaval.gif3101.ima.api.infrastructure.message;
 
-import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
+import ca.ulaval.gif3101.ima.api.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.infrastructure.message.dao.MessageDAO;
-import ca.ulaval.gif3101.ima.api.infrastructure.message.dto.MessageEntity;
 import ca.ulaval.gif3101.ima.api.utils.RandomGenerator;
 import com.github.javafaker.Faker;
 import org.joda.time.DateTime;

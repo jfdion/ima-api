@@ -1,7 +1,7 @@
 package ca.ulaval.gif3101.ima.api.domain.message.filter;
 
 
-import ca.ulaval.gif3101.ima.api.domain.Distance.Distance;
+import ca.ulaval.gif3101.ima.api.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.domain.message.Message;
 
@@ -24,7 +24,7 @@ public class DistanceFilter implements Filter {
         List<Message> results = new ArrayList<>();
 
         for (Message message : messages) {
-            if (message.insideRadius(activeDistance(config), config.fromLocation, distanceStrategy)) {
+            if (message.insideRadius(config.fromLocation, whichRadius(config), distanceStrategy)) {
                 results.add(message);
             }
         }
@@ -32,7 +32,7 @@ public class DistanceFilter implements Filter {
         return results;
     }
 
-    private Distance activeDistance(FilterConfig config) {
+    private Distance whichRadius(FilterConfig config) {
         switch (config.locationScope) {
             case CLOSE:
                 return config.closeDistance;
