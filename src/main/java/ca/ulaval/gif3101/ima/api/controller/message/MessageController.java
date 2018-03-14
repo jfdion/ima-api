@@ -7,14 +7,11 @@ import ca.ulaval.gif3101.ima.api.controller.transformer.Transformer;
 import ca.ulaval.gif3101.ima.api.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.domain.message.exception.MessageNotFoundException;
-import ca.ulaval.gif3101.ima.api.http.json.message.NoContentMessage;
-import ca.ulaval.gif3101.ima.api.http.json.message.NotFoundMessage;
-import ca.ulaval.gif3101.ima.api.http.json.message.OkMessage;
+import ca.ulaval.gif3101.ima.api.http.json.message.*;
 import ca.ulaval.gif3101.ima.api.http.json.wrapper.JsonCollectionWrapper;
 import ca.ulaval.gif3101.ima.api.http.json.wrapper.JsonEmptyWrapper;
 import ca.ulaval.gif3101.ima.api.http.json.wrapper.JsonEntityWrapper;
 import ca.ulaval.gif3101.ima.api.http.json.wrapper.JsonWrapper;
-import ca.ulaval.gif3101.ima.api.http.json.message.UnexpectedErrorMessage;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.QueryFilter;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.QueryFilterFactory;
 import ca.ulaval.gif3101.ima.api.http.queryFilter.exception.EmptyPageException;
@@ -120,7 +117,7 @@ public class MessageController {
         try {
             MessageDtoResponse dto = transformer.transform(messageService.createMessage(inputDto));
             wrapper = new JsonEntityWrapper<>(dto);
-            wrapper.addMessage(new OkMessage("Message created with success"));
+            wrapper.addMessage(new CreatedMessage("Message created with success"));
         } catch (Exception e) {
             wrapper = unexpectedErrorWrapper(response, e);
         }
