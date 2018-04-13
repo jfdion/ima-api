@@ -1,7 +1,8 @@
 package ca.ulaval.gif3101.ima.api;
 
-import ca.ulaval.gif3101.ima.api.bootstrap.Bootstrap;
-import ca.ulaval.gif3101.ima.api.controller.message.MessageController;
+import ca.ulaval.gif3101.ima.api.message.bootstrap.Bootstrap;
+import ca.ulaval.gif3101.ima.api.message.bootstrap.context.DevContext;
+import ca.ulaval.gif3101.ima.api.message.controller.MessageController;
 import javaslang.control.Try;
 
 import static spark.Spark.*;
@@ -10,7 +11,8 @@ public class APIServer {
 
     public static void main(String[] args) throws Exception {
         InitEnvVars initEnvVars = new InitEnvVars().invoke();
-        Bootstrap bootstrap = new Bootstrap(initEnvVars.getEnv());
+
+        Bootstrap bootstrap = new Bootstrap(new DevContext());
 
         port(initEnvVars.getPortNumber());
 
@@ -22,6 +24,7 @@ public class APIServer {
         get("/api/messages", (req, res) -> messageController.getAll(req, res));
         get("/api/messages/:message-id", (req, res) -> messageController.getOne(req, res));
         post("/api/messages", (req, res) -> messageController.create(req, res));
+        post("/api/messages/search", (req, res) -> messageController.search(req, res));
 
         options("*", (request, response) -> "");
         before((request, response) -> {
