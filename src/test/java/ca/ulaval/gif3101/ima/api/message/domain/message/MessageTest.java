@@ -43,15 +43,11 @@ public class MessageTest {
     @Mock
     private IdGenerator idGenerator;
 
-    @Mock
-    private DistanceCalculatorStrategy distanceCalculatorStrategy;
-
     private Message message;
 
     @Before
     public void setUp() {
         given(idGenerator.generate()).willReturn(SOME_ID);
-        given(distanceCalculatorStrategy.calculate(any(Location.class), any(Location.class))).willReturn(resultDistance);
 
         message = new Message(SOME_TITLE, SOME_BODY, expires, location);
     }

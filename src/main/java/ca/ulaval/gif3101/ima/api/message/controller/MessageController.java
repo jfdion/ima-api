@@ -152,7 +152,7 @@ public class MessageController {
     public Object create(Request request, Response response) throws Exception {
         MessageDto inputDto = buildMessageFromCreationDto(mapper.readValue(request.body(), CreateMessageDto.class));
 
-        JsonWrapper wrapper; 
+        JsonWrapper wrapper;
         try {
             MessageDtoResponse dto = transformer.transform(messageService.createMessage(inputDto));
             wrapper = new JsonEntityWrapper<>(dto);
