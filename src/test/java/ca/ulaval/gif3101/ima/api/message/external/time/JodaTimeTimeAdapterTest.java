@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.message.external.time;
 
 import ca.ulaval.gif3101.ima.api.message.domain.time.TimeAdapter;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class JodaTimeTimeAdapterTest {
     public void givenATimeAdapter_whenCreatedWithEmptyTime_currentTimeIsUsed() {
         TimeAdapter timeAdapter = new JodaTimeTimeAdapter();
 
-        LocalTime expected = new LocalTime();
+        LocalTime expected = new LocalTime(DateTimeZone.forID(JodaTimeTimeAdapter.TIMEZONE_ID));
 
         assertEquals(toInt(expected.hourOfDay().getAsShortText()), timeAdapter.hour());
         assertEquals(toInt(expected.minuteOfHour().getAsShortText()), timeAdapter.minute());
