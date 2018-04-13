@@ -18,8 +18,8 @@ public class MessageAssembler {
         dto.latitude = message.location.getLatitude();
         dto.longitude = message.location.getLongitude();
         if (message.visibilityPeriod != null) {
-            dto.visibilityEndTime = message.visibilityPeriod.start().toString();
-            dto.visibilityStartTime = message.visibilityPeriod.end().toString();
+            dto.visibilityEndTime = message.visibilityPeriod.end().toString();
+            dto.visibilityStartTime = message.visibilityPeriod.start().toString();
         }
 
         return dto;

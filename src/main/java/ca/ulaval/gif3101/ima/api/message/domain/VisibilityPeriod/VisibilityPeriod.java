@@ -23,7 +23,7 @@ public class VisibilityPeriod {
 
     public boolean isVisible(TimeAdapter time) {
         if (start.before(end)) {
-            return time.between(start, end);
+            return start.before(time) && end.after(time);
         } else {
             return time.between(start, time.endOfDay()) || time.between(time.startOfDay(), end);
         }
