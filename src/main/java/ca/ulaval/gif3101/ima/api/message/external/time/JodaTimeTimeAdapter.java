@@ -6,14 +6,15 @@ import org.joda.time.LocalTime;
 
 public class JodaTimeTimeAdapter implements TimeAdapter {
 
+    public static final String TIMEZONE_ID = "America/New_York";
     protected LocalTime localTime;
 
     public JodaTimeTimeAdapter() {
-        localTime = new LocalTime(DateTimeZone.forID("America/New York"));
+        localTime = new LocalTime(DateTimeZone.forID(TIMEZONE_ID));
     }
 
     public JodaTimeTimeAdapter(String time) {
-        localTime = new LocalTime(time, DateTimeZone.forID("America/New York"));
+        localTime = new LocalTime(time, DateTimeZone.forID(TIMEZONE_ID));
     }
 
     @Override
