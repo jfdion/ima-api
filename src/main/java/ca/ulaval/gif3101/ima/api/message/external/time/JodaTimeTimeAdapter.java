@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.message.external.time;
 
 import ca.ulaval.gif3101.ima.api.message.domain.time.TimeAdapter;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 
 public class JodaTimeTimeAdapter implements TimeAdapter {
@@ -8,11 +9,11 @@ public class JodaTimeTimeAdapter implements TimeAdapter {
     protected LocalTime localTime;
 
     public JodaTimeTimeAdapter() {
-        localTime = new LocalTime();
+        localTime = new LocalTime(DateTimeZone.forID("America/New York"));
     }
 
     public JodaTimeTimeAdapter(String time) {
-        localTime = new LocalTime(time);
+        localTime = new LocalTime(time, DateTimeZone.forID("America/New York"));
     }
 
     @Override
