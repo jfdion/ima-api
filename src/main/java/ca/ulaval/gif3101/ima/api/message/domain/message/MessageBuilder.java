@@ -1,10 +1,13 @@
 package ca.ulaval.gif3101.ima.api.message.domain.message;
 
 import ca.ulaval.gif3101.ima.api.message.domain.VisibilityPeriod.VisibilityPeriod;
+import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.date.DateAdapter;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
 
 public class MessageBuilder {
+
+    protected Author author = new Author();
 
     protected String title;
     protected String body;
@@ -25,13 +28,18 @@ public class MessageBuilder {
         return this;
     }
 
+    public MessageBuilder with(Author autor) {
+        this.author = autor;
+        return this;
+    }
+
 
     public Message build() {
         Message message;
         if (visibilityPeriod != null) {
-            message = new Message(title, body, expires, location, visibilityPeriod);
+            message = new Message(author, title, body, expires, location, visibilityPeriod);
         } else {
-            message = new Message(title, body, expires, location);
+            message = new Message(author, title, body, expires, location);
         }
 
         clear();
@@ -40,6 +48,7 @@ public class MessageBuilder {
     }
 
     private void clear() {
+        author = new Author();
         title = null;
         body = null;
         expires = null;

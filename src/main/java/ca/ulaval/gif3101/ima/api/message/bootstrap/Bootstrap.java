@@ -12,6 +12,10 @@ import ca.ulaval.gif3101.ima.api.message.http.UriBuilderFactory;
 import ca.ulaval.gif3101.ima.api.message.http.queryFilter.QueryFilterFactory;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.id.IdGenerator;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.id.UUIDGenerator;
+import ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter.CreatedFilter;
+import ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter.DistanceFilter;
+import ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter.FilterTimeVisibility;
+import ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter.NotExpiredFilter;
 import ca.ulaval.gif3101.ima.api.message.service.message.MessageService;
 import ca.ulaval.gif3101.ima.api.message.service.transformer.MessageTransformer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,7 +41,7 @@ public class Bootstrap {
 
     private QueryFilterFactory queryFilterFactory;
 
-    private IdGenerator idGenerator;
+
     private UriBuilderFactory uriBuilderFactory;
 
     private FilterComposite messageFilter;
@@ -98,17 +102,11 @@ public class Bootstrap {
 
     private MessageRepository messageRepository() {
         if (messageRepository == null) {
-            messageRepository = context.getMessageRepository(idGenerator(), messageFilter());
+            messageRepository = context.getMessageRepository(messageFactory(), messageFilter());
         }
         return messageRepository;
     }
 
-    private IdGenerator idGenerator() {
-        if (idGenerator == null) {
-            idGenerator = new UUIDGenerator();
-        }
-        return idGenerator;
-    }
 
     private QueryFilterFactory queryFilterFactory() {
         if (queryFilterFactory == null) {
@@ -126,7 +124,7 @@ public class Bootstrap {
 
     private Filter messageFilter() {
         if (messageFilter == null) {
-            messageFilter = new FilterStack();
+            messageFilter = new FilterComposite();
             messageFilter.addFilter(new CreatedFilter());
             messageFilter.addFilter(new NotExpiredFilter());
             messageFilter.addFilter(new DistanceFilter(new HaversineDistanceCalculatorStrategy()));

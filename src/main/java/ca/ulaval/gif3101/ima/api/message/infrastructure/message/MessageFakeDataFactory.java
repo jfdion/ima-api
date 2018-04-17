@@ -1,17 +1,20 @@
 package ca.ulaval.gif3101.ima.api.message.infrastructure.message;
 
 import ca.ulaval.gif3101.ima.api.message.domain.VisibilityPeriod.VisibilityPeriod;
+import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.date.DateAdapter;
-import ca.ulaval.gif3101.ima.api.message.domain.time.TimeAdapter;
-import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.message.domain.message.MessageRepository;
+import ca.ulaval.gif3101.ima.api.message.domain.time.TimeAdapter;
+import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.external.time.JodaTimeTimeAdapter;
 import ca.ulaval.gif3101.ima.api.message.utils.RandomGenerator;
 import com.github.javafaker.Faker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -49,7 +52,15 @@ public class MessageFakeDataFactory {
         Location baseLocation = new Location(46.816667, -71.216667);
         Location location;
 
+        List<Message> messages= new ArrayList<>();
         for (int i = 0; i < numberOfEntries; i++) {
+            Author author;
+            if (random.nextBoolean()) {
+                author = new Author(faker.name().firstName());
+            } else {
+                author = new Author();
+            }
+
             String title = faker.lorem().sentence();
             String body = faker.lorem().paragraph();
 
@@ -72,14 +83,15 @@ public class MessageFakeDataFactory {
 
 
             if (random.nextBoolean()) {
-                message = new Message(title, body, expires, location, new VisibilityPeriod(visibilityStart, visibilityEnd));
+                message = new Message(author, title, body, expires, location, new VisibilityPeriod(visibilityStart, visibilityEnd));
             } else {
-                message = new Message(title, body, expires, location);
+                message = new Message(author, title, body, expires, location);
             }
             message.changeCreated(created);
 
-            messageRepository.save(message);
+            messages.add(message);
         }
+        messageRepository.saveAll(messages);
     }
 
 }

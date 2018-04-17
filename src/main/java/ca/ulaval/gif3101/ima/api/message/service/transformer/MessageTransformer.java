@@ -23,6 +23,7 @@ public class MessageTransformer implements Transformer<MessageDtoResponse, Messa
         MessageDtoResponse outDto = new MessageDtoResponse();
 
         outDto.id = inDto.id;
+        outDto.author = inDto.author;
         outDto.title = inDto.title;
         outDto.body = inDto.body;
         outDto.created = inDto.created;

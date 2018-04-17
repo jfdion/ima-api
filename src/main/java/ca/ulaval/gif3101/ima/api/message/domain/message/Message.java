@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.message.domain.message;
 
 import ca.ulaval.gif3101.ima.api.message.domain.VisibilityPeriod.VisibilityPeriod;
+import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.date.DateAdapter;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.message.domain.time.TimeAdapter;
@@ -11,6 +12,7 @@ public class Message {
 
     protected String id = null;
 
+    protected Author author;
     protected String title;
     protected String body;
     protected DateAdapter expires;
@@ -18,7 +20,8 @@ public class Message {
     protected Location location;
     protected VisibilityPeriod visibilityPeriod;
 
-    public Message(String title, String body, DateAdapter expires, Location location) {
+    public Message(Author author, String title, String body, DateAdapter expires, Location location) {
+        this.author = author;
         this.title = title;
         this.body = body;
         this.expires = expires;
@@ -26,7 +29,8 @@ public class Message {
         this.created = new JodaTimeDateAdapter();
     }
 
-    public Message(String title, String body, DateAdapter expires, Location location, VisibilityPeriod visibilityPeriod) {
+    public Message(Author author, String title, String body, DateAdapter expires, Location location, VisibilityPeriod visibilityPeriod) {
+        this.author = author;
         this.title = title;
         this.body = body;
         this.expires = expires;
@@ -73,5 +77,37 @@ public class Message {
 
     public Location location() {
         return location;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public DateAdapter getExpires() {
+        return expires;
+    }
+
+    public DateAdapter getCreated() {
+        return created;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public VisibilityPeriod getVisibilityPeriod() {
+        return visibilityPeriod;
     }
 }

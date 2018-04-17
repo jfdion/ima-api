@@ -2,6 +2,7 @@ package ca.ulaval.gif3101.ima.api;
 
 import ca.ulaval.gif3101.ima.api.message.bootstrap.Bootstrap;
 import ca.ulaval.gif3101.ima.api.message.bootstrap.context.DevContext;
+import ca.ulaval.gif3101.ima.api.message.bootstrap.context.ProdContext;
 import ca.ulaval.gif3101.ima.api.message.controller.MessageController;
 import javaslang.control.Try;
 
@@ -12,7 +13,7 @@ public class APIServer {
     public static void main(String[] args) throws Exception {
         InitEnvVars initEnvVars = new InitEnvVars().invoke();
 
-        Bootstrap bootstrap = new Bootstrap(new DevContext());
+        Bootstrap bootstrap = new Bootstrap(new ProdContext());
 
         port(initEnvVars.getPortNumber());
 

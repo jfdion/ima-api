@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateMessageDto extends MessageDto {
 
+    public String author;
+
     public String title;
 
     public String body;

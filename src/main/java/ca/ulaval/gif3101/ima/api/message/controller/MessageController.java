@@ -151,7 +151,6 @@ public class MessageController {
 
     public Object create(Request request, Response response) throws Exception {
         MessageDto inputDto = buildMessageFromCreationDto(mapper.readValue(request.body(), CreateMessageDto.class));
-
         JsonWrapper wrapper;
         try {
             MessageDtoResponse dto = transformer.transform(messageService.createMessage(inputDto));
@@ -169,6 +168,7 @@ public class MessageController {
         MessageDto dto = new MessageDto();
 
         dto.title = creationDto.title;
+        dto.author = creationDto.author;
         dto.body = creationDto.body;
         dto.expires = creationDto.expires;
         dto.latitude = Double.valueOf(creationDto.latitude);

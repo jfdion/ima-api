@@ -1,25 +1,25 @@
-package ca.ulaval.gif3101.ima.api.message.domain.message.filter;
+package ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter;
 
-import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
+import ca.ulaval.gif3101.ima.api.message.domain.message.filter.Filter;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
 import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
-import ca.ulaval.gif3101.ima.api.message.external.time.JodaTimeTimeAdapter;
+import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterTimeVisibility  implements Filter {
+public class CreatedFilter implements Filter {
 
     @Override
     public List<Message> filter(List<Message> messages, MessageQuery query) {
-        if (!query.hasTimeVisibility()) {
+        if (!query.isCreated()) {
             return messages;
         }
         List<Message> results = new ArrayList<>();
 
-        JodaTimeTimeAdapter now = new JodaTimeTimeAdapter();
+        JodaTimeDateAdapter now = new JodaTimeDateAdapter();
         for (Message message : messages) {
-            if (message.isVisible(now)) {
+            if (message.created(now)) {
                 results.add(message);
             }
         }

@@ -32,6 +32,15 @@ public class MessageRepositoryInMemory implements MessageRepository {
     }
 
     @Override
+    public void saveAll(List<Message> messages) {
+        for (Message message : messages) {
+            if (!this.messages.contains(message)) {
+                this.messages.add(message);
+            }
+        }
+    }
+
+    @Override
     public List<Message> findAll() {
         return messages;
     }

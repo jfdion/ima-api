@@ -9,6 +9,8 @@ public interface MessageRepository {
 
     void save(Message message);
 
+    void saveAll(List<Message> messages);
+
     List<Message> findAll();
 
     List<Message> findFiltered(MessageQuery query);

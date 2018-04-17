@@ -7,6 +7,8 @@ public class MessageDtoResponse {
     private final String GOOGLE_MAP_SEARCH = "https://www.google.ca/maps/search/%s,%s";
 
     public String id;
+
+    public String author;
     public String title;
     public String body;
 

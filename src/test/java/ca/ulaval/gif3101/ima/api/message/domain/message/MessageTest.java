@@ -1,9 +1,9 @@
 package ca.ulaval.gif3101.ima.api.message.domain.message;
 
+import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.date.DateAdapter;
 import ca.ulaval.gif3101.ima.api.message.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
-import ca.ulaval.gif3101.ima.api.message.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.id.IdGenerator;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,6 +26,9 @@ public class MessageTest {
     public static final String SOME_OTHER_ID = "2";
     @Mock
     private DateAdapter today;
+
+    @Mock
+    private Author author;
 
     @Mock
     private DateAdapter expires;
@@ -49,7 +51,7 @@ public class MessageTest {
     public void setUp() {
         given(idGenerator.generate()).willReturn(SOME_ID);
 
-        message = new Message(SOME_TITLE, SOME_BODY, expires, location);
+        message = new Message(author, SOME_TITLE, SOME_BODY, expires, location);
     }
 
     @Test

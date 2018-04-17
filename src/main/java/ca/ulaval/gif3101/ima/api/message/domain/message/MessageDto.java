@@ -3,6 +3,7 @@ package ca.ulaval.gif3101.ima.api.message.domain.message;
 
 public class MessageDto {
     public String id;
+    public String author;
     public String title;
     public String body;
     public String expires;

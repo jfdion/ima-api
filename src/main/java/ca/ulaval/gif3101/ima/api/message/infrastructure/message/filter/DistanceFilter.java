@@ -1,8 +1,9 @@
-package ca.ulaval.gif3101.ima.api.message.domain.message.filter;
+package ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter;
 
 
 import ca.ulaval.gif3101.ima.api.message.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
+import ca.ulaval.gif3101.ima.api.message.domain.message.filter.Filter;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
 
 import java.util.ArrayList;

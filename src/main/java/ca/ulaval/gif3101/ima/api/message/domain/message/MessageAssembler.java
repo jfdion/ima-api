@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.message.domain.message;
 
 import ca.ulaval.gif3101.ima.api.message.domain.VisibilityPeriod.VisibilityPeriod;
+import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
 import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.external.time.JodaTimeTimeAdapter;
@@ -11,6 +12,7 @@ public class MessageAssembler {
         MessageDto dto = new MessageDto();
 
         dto.id = message.id;
+        dto.author = message.author.getUsername();
         dto.title = message.title;
         dto.body = message.body;
         dto.expires = message.expires.toString();
@@ -41,6 +43,7 @@ public class MessageAssembler {
 
     private void dtoToMessage(MessageDto dto, Message message) {
         message.id = dto.id;
+        message.author = new Author(dto.author);
         message.title = dto.title;
         message.body = dto.body;
         message.location = new Location(dto.latitude, dto.longitude);
