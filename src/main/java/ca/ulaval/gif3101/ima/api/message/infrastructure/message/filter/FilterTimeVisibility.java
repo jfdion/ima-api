@@ -3,13 +3,12 @@ package ca.ulaval.gif3101.ima.api.message.infrastructure.message.filter;
 import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.message.domain.message.filter.Filter;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
-import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.external.time.JodaTimeTimeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterTimeVisibility  implements Filter {
+public class FilterTimeVisibility implements Filter {
 
     @Override
     public List<Message> filter(List<Message> messages, MessageQuery query) {

@@ -32,6 +32,12 @@ public class JodaTimeDateAdapter implements DateAdapter {
     }
 
     @Override
+    public boolean after(DateAdapter dateAdapter) {
+        JodaTimeDateAdapter djta = (JodaTimeDateAdapter) dateAdapter;
+        return dateTime.isAfter(djta.dateTime);
+    }
+
+    @Override
     public java.util.Date toDate() {
         return dateTime.toDate();
     }

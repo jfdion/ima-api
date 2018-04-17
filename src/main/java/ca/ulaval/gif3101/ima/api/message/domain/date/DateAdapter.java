@@ -5,5 +5,7 @@ public interface DateAdapter {
 
     boolean before(DateAdapter dateAdapter);
 
+    boolean after(DateAdapter dateAdapter);
+
     java.util.Date toDate();
 }

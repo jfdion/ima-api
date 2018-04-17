@@ -7,6 +7,6 @@ import ca.ulaval.gif3101.ima.api.message.infrastructure.id.IdGenerator;
 
 public interface Context {
 
-    MessageRepository getMessageRepository(MessageFactory messageFactory, Filter filter);
+    MessageRepository getMessageRepository(MessageFactory messageFactory);
 
 }

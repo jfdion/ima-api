@@ -40,7 +40,7 @@ public class MessageRepositoryMongoDb implements MessageRepository {
 
     @Override
     public List<Message> findFiltered(MessageQuery query) {
-        return filter.filter(messageDAO.findAll(), query);
+        return filter.filter(messageDAO.findAllFiltered(query), query);
     }
 
     @Override

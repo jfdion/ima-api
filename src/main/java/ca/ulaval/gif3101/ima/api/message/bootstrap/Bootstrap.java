@@ -23,8 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Bootstrap {
 
-    public static final String ENV_DEV = "dev";
-
     private Context context;
 
     private MessageController messageController;
@@ -43,8 +41,6 @@ public class Bootstrap {
 
 
     private UriBuilderFactory uriBuilderFactory;
-
-    private FilterComposite messageFilter;
 
     public Bootstrap(Context context) {
         this.context = context;
@@ -102,7 +98,7 @@ public class Bootstrap {
 
     private MessageRepository messageRepository() {
         if (messageRepository == null) {
-            messageRepository = context.getMessageRepository(messageFactory(), messageFilter());
+            messageRepository = context.getMessageRepository(messageFactory());
         }
         return messageRepository;
     }
@@ -122,15 +118,6 @@ public class Bootstrap {
         return uriBuilderFactory;
     }
 
-    private Filter messageFilter() {
-        if (messageFilter == null) {
-            messageFilter = new FilterComposite();
-            messageFilter.addFilter(new CreatedFilter());
-            messageFilter.addFilter(new NotExpiredFilter());
-            messageFilter.addFilter(new DistanceFilter(new HaversineDistanceCalculatorStrategy()));
-            messageFilter.addFilter(new FilterTimeVisibility());
-        }
-        return messageFilter;
-    }
+
 
 }

@@ -3,11 +3,16 @@ package ca.ulaval.gif3101.ima.api.message.infrastructure.message.dao;
 import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.message.domain.message.MessageDto;
 import ca.ulaval.gif3101.ima.api.message.domain.message.MessageFactory;
+import ca.ulaval.gif3101.ima.api.message.domain.message.filter.Filter;
+import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
+import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.id.DAOEntityIdGenerator;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.message.dao.Exception.InvalidOperationException;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.message.dto.MessageEntity;
+import ca.ulaval.gif3101.ima.api.message.infrastructure.message.query.filter.QueryFilter;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +20,12 @@ import java.util.List;
 public class MessageDAOMongoDb implements MessageDAO {
 
     private Datastore datastore;
+    private QueryFilter queryFilter;
     private MessageFactory messageFactory;
 
-    public MessageDAOMongoDb(Datastore datastore, MessageFactory messageFactory) {
+    public MessageDAOMongoDb(Datastore datastore, QueryFilter queryFilter, MessageFactory messageFactory) {
         this.datastore = datastore;
+        this.queryFilter = queryFilter;
         this.messageFactory = messageFactory;
     }
 
@@ -26,11 +33,23 @@ public class MessageDAOMongoDb implements MessageDAO {
     public List<Message> findAll() {
         List<MessageEntity> messageEntities = datastore.find(MessageEntity.class).asList();
 
+        return entityListToMessageList(messageEntities);
+    }
+
+    private List<Message> entityListToMessageList(List<MessageEntity> messageEntities) {
         List<Message> messages = new ArrayList<>();
         for (MessageEntity entity : messageEntities) {
             messages.add(toMessage(entity));
         }
         return messages;
+    }
+
+    @Override
+    public List<Message> findAllFiltered(MessageQuery messageQuery) {
+
+        Query<MessageEntity> query = queryFilter.filter(datastore.find(MessageEntity.class), messageQuery);
+        List<MessageEntity> entities = query.asList();
+        return entityListToMessageList(entities);
     }
 
     @Override
@@ -101,6 +120,7 @@ public class MessageDAOMongoDb implements MessageDAO {
         if (!message.hasId()) {
             message.assignId(DAOEntityIdGenerator.createFromEntity(entity));
         }
+        message.changeCreated(new JodaTimeDateAdapter(entity.created));
         return message;
     }
 
