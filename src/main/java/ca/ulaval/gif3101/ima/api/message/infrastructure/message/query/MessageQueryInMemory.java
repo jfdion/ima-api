@@ -1,7 +1,7 @@
 package ca.ulaval.gif3101.ima.api.message.infrastructure.message.query;
 
-import ca.ulaval.gif3101.ima.api.message.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.message.domain.location.LocationScope;
 import ca.ulaval.gif3101.ima.api.message.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
@@ -14,11 +14,8 @@ public class MessageQueryInMemory implements MessageQuery {
     private boolean timeVisible = false;
 
     private Location fromLocation;
-    private LocationScope locationScope;
+    private String locationScope;
 
-    private Distance closeDistance = Distance.fromMeters(150);
-    private Distance mediumDistance = Distance.fromKilometers(5);
-    private Distance generalRadius = Distance.fromKilometers(150);
 
     public MessageQueryInMemory() {
         locationScope = LocationScope.MEDIUM;
@@ -30,9 +27,15 @@ public class MessageQueryInMemory implements MessageQuery {
     }
 
     @Override
-    public void locationScope(LocationScope scope) {
+    public Location getFromLocation() {return this.fromLocation;}
+
+    @Override
+    public void locationScope(String scope) {
         this.locationScope = scope;
     }
+
+    @Override
+    public String getLocationScope() {return this.locationScope;}
 
     @Override
     public void created() {
@@ -77,25 +80,5 @@ public class MessageQueryInMemory implements MessageQuery {
     @Override
     public boolean hasTimeVisibility() {
         return timeVisible;
-    }
-
-    @Override
-    public boolean isInsideScopeRadius(Message message, DistanceCalculatorStrategy strategy) {
-        return strategy
-                .calculate(fromLocation, message.location())
-                .lesserOrEqualThan(whichRadius());
-    }
-
-    private Distance whichRadius() {
-        switch (locationScope) {
-            case CLOSE:
-                return closeDistance;
-            case MEDIUM:
-                return mediumDistance;
-            case GENERAL:
-                return generalRadius;
-            default:
-                return closeDistance;
-        }
     }
 }

@@ -3,25 +3,30 @@ package ca.ulaval.gif3101.ima.api.message.domain.message;
 import ca.ulaval.gif3101.ima.api.message.domain.VisibilityPeriod.VisibilityPeriod;
 import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.message.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.external.time.JodaTimeTimeAdapter;
 
 public class MessageFactory {
     private MessageBuilder messageBuilder;
+    private DistanceCalculatorStrategy distanceStrategy;
 
-    public MessageFactory(MessageBuilder messageBuilder) {
+    public MessageFactory(MessageBuilder messageBuilder, DistanceCalculatorStrategy distanceStrategy) {
         this.messageBuilder = messageBuilder;
+        this.distanceStrategy = distanceStrategy;
     }
 
     public Message create(MessageDto dto) {
+        Location location =  new Location(
+                dto.latitude,
+                dto.longitude
+        );
+
         this.messageBuilder.createMessage(
                 dto.title,
                 dto.body,
                 new JodaTimeDateAdapter(dto.expires),
-                new Location(
-                        dto.latitude,
-                        dto.longitude
-                )
+                location
         );
 
         if (hasVisibilityPeriod(dto)) {
@@ -32,7 +37,11 @@ public class MessageFactory {
             this.messageBuilder.with(new Author(dto.author));
         }
 
-        return this.messageBuilder.build();
+        Message message = this.messageBuilder.build();
+
+        message.calculateDistanceFrom(location, distanceStrategy);
+
+        return message;
     }
 
     private boolean hasAuthor(String author) {

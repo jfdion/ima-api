@@ -3,6 +3,8 @@ package ca.ulaval.gif3101.ima.api.message.external.date;
 import ca.ulaval.gif3101.ima.api.message.domain.date.DateAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class JodaTimeDateAdapter implements DateAdapter {
 
@@ -40,5 +42,11 @@ public class JodaTimeDateAdapter implements DateAdapter {
     @Override
     public java.util.Date toDate() {
         return dateTime.toDate();
+    }
+
+    @Override
+    public String toTime() {
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("H:m");
+        return fmt.print(dateTime);
     }
 }

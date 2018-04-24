@@ -32,4 +32,8 @@ public class Distance {
         return this.distance <= distance.distance;
     }
 
+    public int compare(Distance distance) {
+       return Double.compare(this.distance, distance.distance);
+    }
+
 }

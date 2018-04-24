@@ -12,6 +12,11 @@ public class MessageDtoResponse {
     public String title;
     public String body;
 
+    public boolean readable;
+
+    @JsonProperty(value="readable-distance-in-meters")
+    public double readableDistance;
+
     @JsonProperty(value="expires-at")
     public String expires;
 
@@ -20,6 +25,12 @@ public class MessageDtoResponse {
 
     public double latitude;
     public double longitude;
+
+    @JsonProperty(value="calculated-distance-in-meters")
+    public double calculatedDistance;
+
+    @JsonProperty(value="calculated-distance-from")
+    public String distanceCalculatedFromLocation;
 
     @JsonProperty(value="visibility-start-time")
     public String visibilityStartTime;

@@ -15,10 +15,19 @@ public class MessageAssembler {
         dto.author = message.author.getUsername();
         dto.title = message.title;
         dto.body = message.body;
+        dto.readableBody = message.getReadableBody();
+        dto.readable = message.isReadable();
+        dto.readableDistance = message.getReadableDistance().toMeters();
         dto.expires = message.expires.toString();
         dto.created = message.created.toString();
         dto.latitude = message.location.getLatitude();
         dto.longitude = message.location.getLongitude();
+
+        if (message.hasCalculatedDistance()) {
+            dto.calculatedDistance = message.getCalculatedDistance().toMeters();
+            dto.distanceCalculatedFromLocation = message.getCalculatedDistanceLocation().toString();
+        }
+
         if (message.visibilityPeriod != null) {
             dto.visibilityEndTime = message.visibilityPeriod.end().toString();
             dto.visibilityStartTime = message.visibilityPeriod.start().toString();

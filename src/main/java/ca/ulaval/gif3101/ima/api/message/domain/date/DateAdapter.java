@@ -7,5 +7,7 @@ public interface DateAdapter {
 
     boolean after(DateAdapter dateAdapter);
 
+    String toTime();
+
     java.util.Date toDate();
 }

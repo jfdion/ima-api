@@ -4,6 +4,7 @@ import ca.ulaval.gif3101.ima.api.message.domain.message.*;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MessageService {
@@ -45,6 +46,14 @@ public class MessageService {
 
     public List<MessageDto> getAllFiltered(MessageQuery query) {
         List<Message> messages = messageRepository.findFiltered(query);
+
+        messages.sort(new Comparator<Message>() {
+            @Override
+            public int compare(Message lhs, Message rhs) {
+                return lhs.getCalculatedDistance().compare(rhs.getCalculatedDistance());
+            }
+        });
+
         return createDtos(messages);
     }
 

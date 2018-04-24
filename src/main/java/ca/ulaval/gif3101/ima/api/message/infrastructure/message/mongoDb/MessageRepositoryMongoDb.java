@@ -1,4 +1,4 @@
-package ca.ulaval.gif3101.ima.api.message.infrastructure.message;
+package ca.ulaval.gif3101.ima.api.message.infrastructure.message.mongoDb;
 
 import ca.ulaval.gif3101.ima.api.message.domain.message.Message;
 import ca.ulaval.gif3101.ima.api.message.domain.message.MessageRepository;

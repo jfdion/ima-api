@@ -69,7 +69,7 @@ public class Bootstrap {
 
     private MessageFactory messageFactory() {
         if (messageFactory == null) {
-            messageFactory = new MessageFactory(messageBuilder());
+            messageFactory = new MessageFactory(messageBuilder(), new HaversineDistanceCalculatorStrategy());
         }
         return messageFactory;
     }

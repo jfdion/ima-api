@@ -21,11 +21,11 @@ public class QueryFilterFactory {
                 intValueOrDefault(request.queryParams("page"), DEFAULT_VALUE_PAGE),
                 collection
         );
-        if (request.queryParams("location") != null) {
-            queryFilter.addQueryParam("location", request.queryParams("location"));
+        if (request.queryParams("distanceCalculatedFromLocation") != null) {
+            queryFilter.addQueryParam("distanceCalculatedFromLocation", request.queryParams("distanceCalculatedFromLocation"));
         }
-        if (request.queryParams("location-scope") != null) {
-            queryFilter.addQueryParam("location-scope", request.queryParams("location-scope"));
+        if (request.queryParams("distanceCalculatedFromLocation-scope") != null) {
+            queryFilter.addQueryParam("distanceCalculatedFromLocation-scope", request.queryParams("distanceCalculatedFromLocation-scope"));
         }
 
         return queryFilter;

@@ -25,11 +25,15 @@ public class MessageTransformer implements Transformer<MessageDtoResponse, Messa
         outDto.id = inDto.id;
         outDto.author = inDto.author;
         outDto.title = inDto.title;
-        outDto.body = inDto.body;
+        outDto.body = inDto.readableBody;
+        outDto.readable = inDto.readable;
+        outDto.readableDistance = inDto.readableDistance;
         outDto.created = inDto.created;
         outDto.expires = inDto.expires;
         outDto.latitude = inDto.latitude;
         outDto.longitude = inDto.longitude;
+        outDto.calculatedDistance = inDto.calculatedDistance;
+        outDto.distanceCalculatedFromLocation = inDto.distanceCalculatedFromLocation;
         outDto.visibilityStartTime = inDto.visibilityStartTime;
         outDto.visibilityEndTime = inDto.visibilityEndTime;
         outDto.updateGoogleMaps();

@@ -25,8 +25,8 @@ public class DistanceFilter implements Filter {
         List<Message> results = new ArrayList<>();
 
         for (Message message : messages) {
-
-            if (query.isInsideScopeRadius(message, distanceStrategy)) {
+            message.calculateDistanceFrom(query.getFromLocation(), distanceStrategy);
+            if (message.isInsideScope(query.getLocationScope())) {
                 results.add(message);
             }
         }

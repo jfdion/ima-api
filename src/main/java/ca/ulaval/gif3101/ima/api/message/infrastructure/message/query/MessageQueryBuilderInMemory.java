@@ -1,6 +1,7 @@
 package ca.ulaval.gif3101.ima.api.message.infrastructure.message.query;
 
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.message.domain.location.LocationScope;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQueryBuilder;
 
@@ -11,7 +12,7 @@ public class MessageQueryBuilderInMemory implements MessageQueryBuilder {
     private boolean timeVisible;
 
     private Location fromLocation;
-    private MessageQuery.LocationScope locationScope;
+    private String locationScope;
 
     public MessageQueryBuilderInMemory() {
         setDefaultValues();
@@ -32,9 +33,18 @@ public class MessageQueryBuilderInMemory implements MessageQueryBuilder {
     @Override
     public MessageQueryBuilder withLocationScope(String scope) {
         if (scope != null) {
-            this.locationScope = MessageQuery.LocationScope.valueOf(scope.toUpperCase());
+            this.locationScope = findScope(scope);
         }
         return this;
+    }
+
+    private String findScope(String scope) {
+        for (LocationScope.scopes scp : LocationScope.scopes.values()) {
+            if (scp.equals(scope.toLowerCase())) {
+                return scp.toString();
+            }
+        }
+        return null;
     }
 
     @Override

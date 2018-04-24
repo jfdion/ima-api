@@ -3,13 +3,17 @@ package ca.ulaval.gif3101.ima.api.message.domain.message;
 import ca.ulaval.gif3101.ima.api.message.domain.VisibilityPeriod.VisibilityPeriod;
 import ca.ulaval.gif3101.ima.api.message.domain.author.Author;
 import ca.ulaval.gif3101.ima.api.message.domain.date.DateAdapter;
+import ca.ulaval.gif3101.ima.api.message.domain.distance.Distance;
 import ca.ulaval.gif3101.ima.api.message.domain.location.Location;
+import ca.ulaval.gif3101.ima.api.message.domain.location.LocationScope;
+import ca.ulaval.gif3101.ima.api.message.domain.location.distanceCalculator.DistanceCalculatorStrategy;
 import ca.ulaval.gif3101.ima.api.message.domain.time.TimeAdapter;
 import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;
 import ca.ulaval.gif3101.ima.api.message.infrastructure.id.IdGenerator;
 
 public class Message {
 
+    public static final String UNREADABLE_MESSAGE = "< unreadable message, move closer to view >";
     protected String id = null;
 
     protected Author author;
@@ -19,6 +23,11 @@ public class Message {
     protected DateAdapter created;
     protected Location location;
     protected VisibilityPeriod visibilityPeriod;
+
+    protected Distance distanceFrom = Distance.fromKilometers(Double.POSITIVE_INFINITY);
+    protected Location distanceCalculatedFrom;
+
+    private Distance readableDistance = LocationScope.CLOSE_DISTANCE;
 
     public Message(Author author, String title, String body, DateAdapter expires, Location location) {
         this.author = author;
@@ -39,7 +48,8 @@ public class Message {
         this.visibilityPeriod = visibilityPeriod;
     }
 
-    protected Message() {}
+    protected Message() {
+    }
 
     public boolean expired(DateAdapter date) {
         return this.expires.before(date);
@@ -109,5 +119,52 @@ public class Message {
 
     public VisibilityPeriod getVisibilityPeriod() {
         return visibilityPeriod;
+    }
+
+    public void calculateDistanceFrom(Location location, DistanceCalculatorStrategy strategy) {
+        distanceFrom = strategy.calculate(location, this.location);
+        distanceCalculatedFrom = location;
+    }
+
+    protected boolean hasCalculatedDistance() {
+        return distanceCalculatedFrom != null;
+    }
+
+    public Location getCalculatedDistanceLocation() {
+        return distanceCalculatedFrom;
+    }
+
+    public Distance getCalculatedDistance() {
+        return distanceFrom;
+    }
+
+    public boolean isReadable() {
+        return distanceFrom.lesserOrEqualThan(this.readableDistance);
+    }
+
+    public Distance getReadableDistance() {
+        return this.readableDistance;
+    }
+
+    public String getReadableBody() {
+        if (isReadable()) {
+            return body;
+        } else {
+            return UNREADABLE_MESSAGE;
+        }
+    }
+
+    public boolean isInsideScope(String scope) {
+        switch (scope) {
+            case LocationScope.CLOSE:
+                return distanceFrom.lesserOrEqualThan(LocationScope.CLOSE_DISTANCE);
+            case LocationScope.MEDIUM:
+                return distanceFrom.lesserOrEqualThan(LocationScope.MEDIUM_DISTANCE);
+            case LocationScope.GENERAL:
+                return distanceFrom.lesserOrEqualThan(LocationScope.GENERAL_DISTANCE);
+            default:
+                return distanceFrom.lesserOrEqualThan(LocationScope.MEDIUM_DISTANCE);
+
+        }
     }
 }

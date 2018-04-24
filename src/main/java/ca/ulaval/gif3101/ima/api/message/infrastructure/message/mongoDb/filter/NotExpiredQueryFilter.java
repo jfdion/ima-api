@@ -1,4 +1,4 @@
-package ca.ulaval.gif3101.ima.api.message.infrastructure.message.query.filter;
+package ca.ulaval.gif3101.ima.api.message.infrastructure.message.mongoDb.filter;
 
 import ca.ulaval.gif3101.ima.api.message.domain.message.query.MessageQuery;
 import ca.ulaval.gif3101.ima.api.message.external.date.JodaTimeDateAdapter;

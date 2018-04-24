@@ -22,7 +22,7 @@ public class HaversineDistanceCalculatorStrategy implements DistanceCalculatorSt
         return Distance.fromKilometers(Earth.RADIUS_KM * c);
     }
 
-    public double haversine(double val) {
+    private double haversine(double val) {
         return Math.pow(Math.sin(val / 2), 2);
     }
 }
