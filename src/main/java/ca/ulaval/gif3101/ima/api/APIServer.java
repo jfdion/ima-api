@@ -13,7 +13,7 @@ public class APIServer {
     public static void main(String[] args) throws Exception {
         InitEnvVars initEnvVars = new InitEnvVars().invoke();
 
-        Bootstrap bootstrap = new Bootstrap(new ProdContext());
+        Bootstrap bootstrap = new Bootstrap(new DevContext());
 
         port(initEnvVars.getPortNumber());
 
